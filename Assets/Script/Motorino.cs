@@ -19,8 +19,9 @@ public class Motorino : MonoBehaviour
     public float gravity = 10f;
 
     [Header("Parti motorino")]
-    public Transform frontWhell;
-    public Transform backWhell;
+    public Transform frontWheel;
+    public Transform backWheel;
+    public Transform steeringPart;
 
 
     private void Start()
@@ -34,7 +35,7 @@ public class Motorino : MonoBehaviour
         float amount = 0;
 
         //Per seguire la sfera
-        transform.position = sphere.transform.position - new Vector3(0, 0.73f, .3f);
+        transform.position = sphere.transform.position - new Vector3(0, 0.53f, .3f);
 
         speed = acceleration;
 
@@ -57,20 +58,22 @@ public class Motorino : MonoBehaviour
         currentRotate = Mathf.Lerp(currentRotate, rotate, Time.deltaTime * 4f); rotate = 0f;
 
         //Animation
-        kartModel.localEulerAngles = Vector3.Lerp(kartModel.localEulerAngles, new Vector3(0, 90+ dir * amount, kartModel.localEulerAngles.z), .2f);
+        kartModel.localEulerAngles = Vector3.Lerp(kartModel.localEulerAngles, new Vector3(0, 90 + dir * amount, kartModel.localEulerAngles.z), .2f);
+        /*if (amount > maxSteering * 2 / 3)
+        {
+            kartModel.localEulerAngles = Vector3.Lerp(kartModel.localEulerAngles, new Vector3(0, 90 + dir * amount, 90 - (dir * amount)/3), .2f);
+        }
+        else
+        {
+            kartModel.localEulerAngles = Vector3.Lerp(kartModel.localEulerAngles, new Vector3(0, 90 + dir * amount, 90), .2f);
+        }*/
+
+        steeringPart.localEulerAngles = new Vector3(0,(dir*amount)/3, -15.4f);
+        
     }
 
     private void FixedUpdate()
     {
-        //Accelerazione frontale
-        sphere.AddForce(transform.forward * currentSpeed, ForceMode.Acceleration);
-
-        //Gravità
-        sphere.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
-
-        //Sterzare
-        transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, new Vector3(0, transform.eulerAngles.y + currentRotate, 0), Time.deltaTime * 5f);
-
         RaycastHit hitOn;
         RaycastHit hitNear;
 
@@ -79,6 +82,17 @@ public class Motorino : MonoBehaviour
 
         kartNormal.up = Vector3.Lerp(kartNormal.up, hitNear.normal, Time.deltaTime * 8.0f);
         kartNormal.Rotate(0, transform.eulerAngles.y, 0);
+
+        //Accelerazione frontale
+        if(hitOn.collider != null)
+            sphere.AddForce(kartModel.transform.forward * currentSpeed, ForceMode.Acceleration);
+
+        //Gravità
+        sphere.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
+
+        //Sterzare
+        transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, new Vector3(0, transform.eulerAngles.y + currentRotate, 0), Time.deltaTime * 5f);
+
     }
 
     public void Steer(int direction, float amount)
