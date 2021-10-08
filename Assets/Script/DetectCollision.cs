@@ -20,7 +20,6 @@ public class DetectCollision : MonoBehaviour
     {
         if(Mathf.Abs(other.attachedRigidbody.velocity.z) <0.2f)
         {
-            Debug.Log("Mi sono parcheggiato! Ho velocità: " + other.attachedRigidbody.velocity.z.ToString());
             if (name == "ParkingArea")
                 FindObjectOfType<GameManager>().StartDelivery(gameObject.transform.parent.gameObject);
             else if (name == "ParkingSlot")

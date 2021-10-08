@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     private List<GameObject> restaurants = new List<GameObject>();
     private List<GameObject> clients = new List<GameObject>();
 
+    private GameObject arrow;
+
     private void AssignClient()
     {
         foreach (GameObject restaurant in restaurants)
@@ -29,6 +31,19 @@ public class GameManager : MonoBehaviour
                 restaurant.SetActive(false);
             }
         }
+    }
+
+    private void AssignTarget(Transform target)
+    {
+        arrow.SetActive(true);
+        arrow.GetComponent<PointAt>().SetTarget(target);
+    }
+
+    private void DeAssignTarget()
+    {
+        arrow.SetActive(false);
+        arrow.GetComponent<PointAt>().SetTarget(null);
+
     }
 
     private void PopulateList(Transform[] array, List<GameObject> listToPopulate)
@@ -57,18 +72,20 @@ public class GameManager : MonoBehaviour
 
     public void StartDelivery(GameObject restaurant)
     {
-        Debug.Log("Inizio consegna da " + restaurant.ToString());
         DeactivateAll(restaurants);
         restaurant.GetComponent<ClienteAssegnato>().GetCliente().SetActive(true);
+
+        AssignTarget(restaurant.GetComponent<ClienteAssegnato>().GetCliente().transform);
     }
 
     public void EndDelivery(GameObject client)
     {
-        Debug.Log("Consegna Effettuata a "+ client.ToString());
         clients.Add(client);
         client.SetActive(false);
         AssignClient();
         ReactivateAll(restaurants);
+
+        DeAssignTarget();
     }
 
     // Start is called before the first frame update
@@ -79,6 +96,9 @@ public class GameManager : MonoBehaviour
 
         DeactivateAll(clients);
         AssignClient();
+
+        arrow = GameObject.Find("Arrow");
+        arrow.SetActive(false);
     }
 
     // Update is called once per frame
