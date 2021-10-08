@@ -4,79 +4,81 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject ristorantiParent;
-    public GameObject clientiParent;
+    public GameObject restaurantsParent;
+    public GameObject clientsParent;
 
-    private List<GameObject> ristoranti = new List<GameObject>();
-    private List<GameObject> clienti = new List<GameObject>();
+    private List<GameObject> restaurants = new List<GameObject>();
+    private List<GameObject> clients = new List<GameObject>();
 
-    /*
-    public class Luogo
+    private void AssignClient()
     {
-        protected string Food { get; set; }
-        protected string Name { get; set; }
-
-        public Luogo(string name, string food)
+        foreach (GameObject restaurant in restaurants)
         {
-            this.Name= name;
-            this.Food = food;
+            ClienteAssegnato scriptCliente = restaurant.GetComponent<ClienteAssegnato>();
+
+            if (clients.Count != 0 && scriptCliente.GetCliente() == null)
+            {
+                Random.InitState(System.DateTime.Now.Millisecond);
+                int i = Mathf.RoundToInt(Random.Range(0, clients.Count - 1));
+                scriptCliente.SetCliente(clients[i]);
+                clients.RemoveAt(i);
+            }
+
+            if (scriptCliente.GetCliente() == null)
+            {
+                restaurant.SetActive(false);
+            }
         }
     }
 
-    public class Ristorante : Luogo
+    private void PopulateList(Transform[] array, List<GameObject> listToPopulate)
     {
-        private GameObject Destination { set; get; }
-
-        public Ristorante(string name, string food, GameObject destination)
+        foreach(var temp in array)
         {
-            this.Name = name;
-            this.Food = food;
-            this.Destination = destination;
+            if (temp.gameObject.layer == 12)
+                listToPopulate.Add(temp.gameObject);
         }
     }
-    */
+
+    public void DeactivateAll(List<GameObject> list)
+    {
+        foreach (var temp in list)
+            temp.SetActive(false);
+    }
+
+    public void ReactivateAll(List<GameObject> list)
+    {
+        foreach (var temp in list)
+        {
+            if(temp.name.Contains("Ristorante") && temp.GetComponent<ClienteAssegnato>().GetCliente() != null)
+                temp.SetActive(true);
+        }
+    }
+
+    public void StartDelivery(GameObject restaurant)
+    {
+        Debug.Log("Inizio consegna da " + restaurant.ToString());
+        DeactivateAll(restaurants);
+        restaurant.GetComponent<ClienteAssegnato>().GetCliente().SetActive(true);
+    }
+
+    public void EndDelivery(GameObject client)
+    {
+        Debug.Log("Consegna Effettuata a "+ client.ToString());
+        clients.Add(client);
+        client.SetActive(false);
+        AssignClient();
+        ReactivateAll(restaurants);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        foreach (var ristorante in ristorantiParent.GetComponentsInChildren<Transform>())
-        {
-            if(ristorante.gameObject.layer == 12)
-                ristoranti.Add(ristorante.gameObject);
-        }
-        //ristoranti.RemoveAt(0);
+        PopulateList(restaurantsParent.GetComponentsInChildren<Transform>(), restaurants);
+        PopulateList(clientsParent.GetComponentsInChildren<Transform>(), clients);
 
-        foreach(var cliente in clientiParent.GetComponentsInChildren<Transform>())
-        {
-            if(cliente.gameObject.layer == 12)
-                clienti.Add(cliente.gameObject);
-        }
-        //clienti.RemoveAt(0);
-
-        foreach(GameObject ristorante in ristoranti)
-        {
-            ClienteAssegnato scriptCliente = ristorante.GetComponent<ClienteAssegnato>();
-
-            if (clienti.Count != 0)
-            {
-                int i = Mathf.RoundToInt(Random.Range(0, clienti.Count - 1));
-                scriptCliente.SetCliente(clienti[i]);
-                scriptCliente.CalculateColor();
-                clienti.RemoveAt(i);
-            }
-
-            if(scriptCliente.GetCliente() == null)
-            {
-                ristorante.SetActive(false);
-            }
-
-        }
-
-        foreach(var ristorante in ristoranti)
-        {
-            if(ristorante.GetComponent<ClienteAssegnato>().GetCliente() != null)
-                Debug.Log(ristorante.ToString() + " ha come cliente: " + ristorante.GetComponent<ClienteAssegnato>().GetCliente().ToString());
-        }
-        
+        DeactivateAll(clients);
+        AssignClient();
     }
 
     // Update is called once per frame

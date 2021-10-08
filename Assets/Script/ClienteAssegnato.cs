@@ -6,6 +6,7 @@ public class ClienteAssegnato : MonoBehaviour
 {
     private GameObject cliente;
     private Renderer[] renderers;
+    private Collider colliderCube;
 
     [Header("Distanze")]
     public float minDistance = 300f;
@@ -13,6 +14,7 @@ public class ClienteAssegnato : MonoBehaviour
     
     private void Start()
     {
+        colliderCube = transform.GetComponent<Collider>();
         renderers = transform.GetComponentsInChildren<Renderer>();
         //materials = transform.GetComponentInChildrens<Renderer>().material;
     }
@@ -25,7 +27,13 @@ public class ClienteAssegnato : MonoBehaviour
     public void SetCliente(GameObject cliente)
     {
         this.cliente = cliente;
+        CalculateColor();
     }
+
+    /*public void StartDelivery()
+    {
+        //colliderCube;
+    }*/
 
     public void CalculateColor()
     {

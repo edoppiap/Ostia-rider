@@ -5,7 +5,7 @@ using UnityEngine.Experimental.PlayerLoop;
 
 public class TouchInput : MonoBehaviour
 {
-
+    /*
     public float Acceleration
     {
         get { return m_Acceleration; }
@@ -78,5 +78,5 @@ public class TouchInput : MonoBehaviour
     private void FixedUpdate()
     {
         m_FixedUpdateHappened = true;
-    }
+    }*/
 }

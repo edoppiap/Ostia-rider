@@ -14,6 +14,7 @@ public class CarController : MonoBehaviour
     private bool isCarGrounded;
     private float lastVelocity = 0;
     private float brakeTime = 0;
+    private float accelationTime = 0;
 
     [Header("Drag")]
     public float airDrag;
@@ -41,7 +42,6 @@ public class CarController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
         //decidere la velocità
         if(Input.touchCount == 2)
         {
@@ -52,10 +52,12 @@ public class CarController : MonoBehaviour
             else
                 moveInput = -revSpeed;
             //moveInput = Mathf.Lerp(fwdSpeed, -revSpeed, brakeTime / brakeSensitivity);
+            accelationTime = 0;
         }
         else
         {
-            moveInput = fwdSpeed;
+            accelationTime += Time.deltaTime;
+            moveInput = Mathf.Lerp(0, fwdSpeed, accelationTime);
             brakeTime = 0;
         }
         //decidere se sterzare
@@ -81,6 +83,11 @@ public class CarController : MonoBehaviour
         //aggiusta l'attrito in base a se è a terra o no
         sphereRB.drag = isCarGrounded ? normalDrag : airDrag;
 
+    }
+
+    public float GetMoveInput()
+    {
+        return moveInput;
     }
 
     private void FixedUpdate()
