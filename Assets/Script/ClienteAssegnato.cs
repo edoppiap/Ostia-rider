@@ -5,17 +5,15 @@ using UnityEngine;
 public class ClienteAssegnato : MonoBehaviour
 {
     private GameObject cliente;
-    private Renderer[] renderers;
     private Collider colliderCube;
 
     [Header("Distanze")]
     public float minDistance = 300f;
     public float maxDistance = 500f;
     
-    private void Start()
+    public void Start()
     {
         colliderCube = transform.GetComponent<Collider>();
-        renderers = transform.GetComponentsInChildren<Renderer>();
         //materials = transform.GetComponentInChildrens<Renderer>().material;
     }
 
@@ -30,15 +28,10 @@ public class ClienteAssegnato : MonoBehaviour
         CalculateColor();
     }
 
-    /*public void StartDelivery()
-    {
-        //colliderCube;
-    }*/
-
     public void CalculateColor()
     {
         float dist = GetDistanceFromClient();
-        foreach(var renderer in renderers)
+        foreach(var renderer in transform.GetComponentsInChildren<Renderer>())
         {
             Material material = renderer.material;
 
