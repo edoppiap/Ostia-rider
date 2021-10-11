@@ -13,8 +13,9 @@ public class CarController : MonoBehaviour
     private float turnInput;
     private bool isCarGrounded;
     private float lastVelocity = 0;
-    private float brakeTime = 0;
-    private float accelationTime = 0;
+
+    private float moveInputLearped;
+    private float timePassed = 0;
 
     [Header("Drag")]
     public float airDrag;
@@ -31,6 +32,43 @@ public class CarController : MonoBehaviour
     public Rigidbody sphereRB;
     public Rigidbody colliderRB;
 
+    public void SterzaDx()
+    {
+        turnInput = moveInput != 0 ? 1 : 0;
+    }
+
+    public void SterzaSx()
+    {
+        turnInput = moveInput != 0 ? -1 : 0;
+    }
+
+    public void DeSterza()
+    {
+        turnInput = 0;
+    }
+
+    public void Accellera()
+    {
+        sphereRB.drag = 4f;
+        moveInput = fwdSpeed;
+    }
+
+    public void Decellera()
+    {
+        sphereRB.drag = .01f;
+        moveInput = 0;
+    }
+
+    public void Frena()
+    {
+        moveInput = -revSpeed;
+    }
+
+    public void DeFrena()
+    {
+        moveInput = 0;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,6 +80,14 @@ public class CarController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(moveInput != 0)
+            timePassed += Time.deltaTime;
+        else
+            timePassed = 0;
+        moveInputLearped = Mathf.Lerp(0, moveInput, timePassed);
+        //moveInputLearped = Mathf.Lerp(fwdSpeed, 0, brakeTime / brakeSensitivity);
+
+        /*
         //decidere la velocità
         if(Input.touchCount == 2)
         {
@@ -65,7 +111,7 @@ public class CarController : MonoBehaviour
         if(Input.touchCount == 1)
             turnInput = Input.GetTouch(0).position.x > Screen.width / 2 ? 1 : -1;
         else
-            turnInput = 0;
+            turnInput = 0;*/
 
         //seguire la sfera
         transform.position = sphereRB.transform.position;
@@ -93,7 +139,7 @@ public class CarController : MonoBehaviour
     private void FixedUpdate()
     {
         if (isCarGrounded)
-            sphereRB.AddForce(transform.forward * moveInput, ForceMode.Acceleration); //muove la macchina
+            sphereRB.AddForce(transform.forward * moveInputLearped, ForceMode.Acceleration); //muove la macchina
         else
             sphereRB.AddForce(transform.up * -9.8f); //aggiunge la gravità
 
