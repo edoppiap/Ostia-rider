@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class BounceAndRotate : MonoBehaviour
 {
-    private Vector3 startPosition;
-    private Vector3 endPosition;
+    public bool bounce;
+    public Vector3 rotate = new Vector3();
+    public float degrees = 360f;
+    public float time = 1f;
 
     private void Start()
     {
-        LeanTween.moveY(gameObject, 10f, 0.3f).setLoopPingPong();
-        LeanTween.rotateAround(gameObject, Vector3.up, 360f, 1f).setLoopClamp();
+        if (bounce)
+            LeanTween.moveY(gameObject, 10f, 0.3f).setLoopPingPong();
+        if(degrees == 360f)
+            LeanTween.rotateAround(gameObject, rotate, degrees, time).setLoopClamp();
+        else
+            LeanTween.rotateAround(gameObject, rotate, degrees, time).setLoopPingPong();
     }
     // Update is called once per frame
     void Update()

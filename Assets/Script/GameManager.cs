@@ -8,19 +8,20 @@ public class GameManager : MonoBehaviour
     [Header("Cameras")]
     public CinemachineVirtualCamera mainCamera;
     public CinemachineVirtualCamera mainMenuCamera;
-    //public Camera MainCamera;
-    //public Camera MainMenuCamera;
     public Canvas GameCanvas;
     public Canvas MainMenuCanvas;
+
+    [Header("Components to hide")]
+    public GameObject settings3DIcon;
+    public GameObject logoIcon;
 
     [Header("Parents")]
     public GameObject restaurantsParent;
     public GameObject clientsParent;
+    public GameObject arrow;
 
     private List<GameObject> restaurants = new List<GameObject>();
     private List<GameObject> clients = new List<GameObject>();
-
-    private GameObject arrow;
 
     private void AssignClient()
     {
@@ -31,7 +32,7 @@ public class GameManager : MonoBehaviour
             if (clients.Count != 0 && scriptCliente.GetCliente() == null)
             {
                 Random.InitState(System.DateTime.Now.Millisecond);
-                int i = Mathf.RoundToInt(Random.Range(0, clients.Count - 1));
+                int i = Mathf.RoundToInt(Random.Range(0, clients.Count));
                 scriptCliente.SetCliente(clients[i]);
                 //clients.RemoveAt(i);
             }
@@ -43,6 +44,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void Clicked()
+    {
+        Debug.Log("Mi hai cliccato");
+    }
+
     public void StartGame()
     {
         mainCamera.Priority = 1;
@@ -50,6 +56,9 @@ public class GameManager : MonoBehaviour
 
         MainMenuCanvas.enabled = false;
         GameCanvas.enabled = true;
+
+        settings3DIcon.active = false;
+        logoIcon.active = false;
     }
 
     private void AssignTarget(Transform target)
@@ -122,7 +131,6 @@ public class GameManager : MonoBehaviour
         DeactivateAll(clients);
         AssignClient();
 
-        arrow = GameObject.Find("Arrow");
         arrow.SetActive(false);
     }
 
