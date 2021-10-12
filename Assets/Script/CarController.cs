@@ -85,34 +85,7 @@ public class CarController : MonoBehaviour
         else
             timePassed = 0;
         moveInputLearped = Mathf.Lerp(0, moveInput, timePassed);
-        //moveInputLearped = Mathf.Lerp(fwdSpeed, 0, brakeTime / brakeSensitivity);
-
-        /*
-        //decidere la velocità
-        if(Input.touchCount == 2)
-        {
-            //moveInput = -revSpeed;
-            brakeTime += Time.deltaTime;
-            if (moveInput > 0)
-                moveInput = Mathf.Lerp(fwdSpeed, 0, brakeTime / brakeSensitivity);
-            else
-                moveInput = -revSpeed;
-            //moveInput = Mathf.Lerp(fwdSpeed, -revSpeed, brakeTime / brakeSensitivity);
-            accelationTime = 0;
-        }
-        else
-        {
-            accelationTime += Time.deltaTime;
-            moveInput = Mathf.Lerp(0, fwdSpeed, accelationTime);
-            brakeTime = 0;
-        }
-        //decidere se sterzare
-
-        if(Input.touchCount == 1)
-            turnInput = Input.GetTouch(0).position.x > Screen.width / 2 ? 1 : -1;
-        else
-            turnInput = 0;*/
-
+        
         //seguire la sfera
         transform.position = sphereRB.transform.position;
         //sterzare

@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     private List<GameObject> restaurants = new List<GameObject>();
     private List<GameObject> clients = new List<GameObject>();
     private GameObject tempRestaurant;
+    private static bool reloaded = false;
 
     public void Pause()
     {
@@ -92,9 +93,16 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
+        reloaded = true;
         Time.timeScale = 1f;
         SceneManager.LoadScene("Game", LoadSceneMode.Single);
-        StartGame();
+    }
+
+    public void BackToMenu()
+    {
+        reloaded = false;
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Game", LoadSceneMode.Single);
     }
 
     public void StartGame()
@@ -169,12 +177,6 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
-        menuCamera.Priority = 1;
-        mainCamera.Priority = 0;
-
-        pauseCanvas.SetActive(false);
-        gameCanvas.SetActive(false);
-
         PopulateList(restaurantsParent.GetComponentsInChildren<Transform>(), restaurants);
         PopulateList(clientsParent.GetComponentsInChildren<Transform>(), clients);
 
@@ -182,6 +184,20 @@ public class GameManager : MonoBehaviour
         AssignClient();
 
         arrow.SetActive(false);
+
+        if (!reloaded)
+        {
+            menuCamera.Priority = 1;
+            mainCamera.Priority = 0;
+
+            pauseCanvas.SetActive(false);
+            gameCanvas.SetActive(false);
+        }
+        else
+        {
+            pauseCanvas.SetActive(false);
+            StartGame();
+        }
     }
 
     // Update is called once per frame
