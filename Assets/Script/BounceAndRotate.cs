@@ -9,7 +9,7 @@ public class BounceAndRotate : MonoBehaviour
     public float degrees = 360f;
     public float time = 1f;
 
-    private void Start()
+    private void OnEnable()
     {
         if (bounce)
             LeanTween.moveY(gameObject, 10f, 0.3f).setLoopPingPong();

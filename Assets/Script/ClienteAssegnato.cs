@@ -5,16 +5,24 @@ using UnityEngine;
 public class ClienteAssegnato : MonoBehaviour
 {
     private GameObject cliente;
-    private Collider colliderCube;
+
+    public float probabilityToBeActive = 1f;
 
     [Header("Distanze")]
     public float minDistance = 300f;
     public float maxDistance = 500f;
+
+    public void SetActiveBasedOnProbability()
+    {
+        if (Random.Range(0, 1) < probabilityToBeActive)
+            gameObject.SetActive(true);
+        else
+            gameObject.SetActive(false);
+    }
     
     public void Start()
     {
-        colliderCube = transform.GetComponent<Collider>();
-        //materials = transform.GetComponentInChildrens<Renderer>().material;
+        
     }
 
     public GameObject GetCliente()
