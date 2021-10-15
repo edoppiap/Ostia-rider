@@ -6,9 +6,9 @@ public class WheelController : MonoBehaviour
     //public TrailRenderer[] trails;
     public TrailRenderer trail;
     public float rotationSpeed;
-    public bool sterzando = false;
-    public bool accellerando = false;
-    
+
+    private bool sterzando = false;
+    private bool accellerando = false;
     private Rigidbody sphereRB;
     private Animator anim;
 

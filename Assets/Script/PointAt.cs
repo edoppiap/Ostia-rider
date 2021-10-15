@@ -9,12 +9,12 @@ public class PointAt : MonoBehaviour
 
     private void OnDisable()
     {
-        LeanTween.scale(gameObject, Vector3.zero, .5f);
+        //LeanTween.scale(gameObject, Vector3.zero, .5f);
     }
 
     private void OnEnable()
     {
-        LeanTween.scale(gameObject, Vector3.one, .5f);
+        //LeanTween.scale(gameObject, Vector3.one, .5f);
     }
 
     public void SetTarget(Transform target)

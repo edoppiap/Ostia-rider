@@ -26,6 +26,7 @@ public class CarController : MonoBehaviour
     public float brakeSensitivity;
     public float revSpeed;
     public float turnSpeed;
+    public float alignToGroungTime = 5;
     public LayerMask groundLayer;
     
     [Header("RigidBody")]
@@ -97,7 +98,8 @@ public class CarController : MonoBehaviour
         isCarGrounded = Physics.Raycast(transform.position, -transform.up, out hit, 1f,  groundLayer);
 
         //rotate the car parallel to the ground
-        transform.rotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
+        Quaternion rotateTo = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotateTo, alignToGroungTime * Time.deltaTime);
 
         //aggiusta l'attrito in base a se è a terra o no
         sphereRB.drag = isCarGrounded ? normalDrag : airDrag;
@@ -114,7 +116,7 @@ public class CarController : MonoBehaviour
         if (isCarGrounded)
             sphereRB.AddForce(transform.forward * moveInputLearped, ForceMode.Acceleration); //muove la macchina
         else
-            sphereRB.AddForce(transform.up * -9.8f); //aggiunge la gravità
+            sphereRB.AddForce(transform.up * -50f); //aggiunge la gravità
 
         colliderRB.MoveRotation(transform.rotation);
     }

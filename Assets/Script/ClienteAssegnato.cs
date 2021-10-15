@@ -14,7 +14,7 @@ public class ClienteAssegnato : MonoBehaviour
 
     public void SetActiveBasedOnProbability()
     {
-        if (Random.Range(0, 1) < probabilityToBeActive)
+        if (Random.Range(0, 1) <= probabilityToBeActive)
             gameObject.SetActive(true);
         else
             gameObject.SetActive(false);
