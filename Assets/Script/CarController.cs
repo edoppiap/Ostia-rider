@@ -14,6 +14,7 @@ public class CarController : MonoBehaviour
     private bool isCarGrounded;
     private float lastVelocity = 0;
 
+    private int customVerticalAxis = 0;
     private float moveInputLearped;
     private float timePassed = 0;
 
@@ -50,23 +51,27 @@ public class CarController : MonoBehaviour
 
     public void Accellera()
     {
+        customVerticalAxis = 1;
         sphereRB.drag = 4f;
         moveInput = fwdSpeed;
     }
 
     public void Decellera()
     {
+        customVerticalAxis = 0;
         sphereRB.drag = .01f;
         moveInput = 0;
     }
 
     public void Frena()
     {
+        customVerticalAxis = -1;
         moveInput = -revSpeed;
     }
 
     public void DeFrena()
     {
+        customVerticalAxis = 0;
         moveInput = 0;
     }
 
@@ -90,7 +95,7 @@ public class CarController : MonoBehaviour
         //seguire la sfera
         transform.position = sphereRB.transform.position;
         //sterzare
-        float newRotation = turnInput * turnSpeed * Time.deltaTime;
+        float newRotation = turnInput * turnSpeed * Time.deltaTime * customVerticalAxis;
         transform.Rotate(0, newRotation, 0, Space.World);
 
         //raycast ground check

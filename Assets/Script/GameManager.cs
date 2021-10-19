@@ -15,9 +15,7 @@ public class GameManager : MonoBehaviour
     //public Canvas MainMenuCanvas;
 
     [Header("Components to hide")]
-    public GameObject settings3DIcon;
-    public GameObject logoIcon;
-    public GameObject playCollider;
+    public GameObject[] objectsToHide;
 
     [Header("Parents")]
     public GameObject restaurantsParent;
@@ -28,6 +26,12 @@ public class GameManager : MonoBehaviour
     private List<GameObject> clients = new List<GameObject>();
     private GameObject tempRestaurant;
     private static bool reloaded = false;
+    private static bool inPlay = false;
+
+    public bool IsInPlay()
+    {
+        return inPlay;
+    }
 
     public void Pause()
     {
@@ -100,6 +104,7 @@ public class GameManager : MonoBehaviour
 
     public void BackToMenu()
     {
+        inPlay = false;
         reloaded = false;
         Time.timeScale = 1f;
         SceneManager.LoadScene("Game", LoadSceneMode.Single);
@@ -107,14 +112,15 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
+        inPlay = true;
         mainCamera.Priority = 1;
         menuCamera.Priority = 0;
 
         gameCanvas.SetActive(true);
 
-        settings3DIcon.SetActive(false);
-        logoIcon.SetActive(false);
-        playCollider.SetActive(false);
+        foreach(var icon in objectsToHide){
+            icon.SetActive(false);
+        }
     }
 
     private void AssignTarget(Transform target)

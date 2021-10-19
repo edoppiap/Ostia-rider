@@ -11,7 +11,7 @@ public class BounceAndRotate : MonoBehaviour
 
     private void OnDisable()
     {
-        //LeanTween.cancel(gameObject);
+        LeanTween.cancel(gameObject);
     }
 
     private void OnEnable()
@@ -19,7 +19,7 @@ public class BounceAndRotate : MonoBehaviour
         //LeanTween.init(800);
         if (bounce)
             LeanTween.moveY(gameObject, 10f, 0.3f).setLoopPingPong();
-        if(degrees == 360f)
+        if (degrees == 360f)
             LeanTween.rotateAround(gameObject, rotate, degrees, time).setLoopClamp();
         else
             LeanTween.rotateAround(gameObject, rotate, degrees, time).setLoopPingPong();
