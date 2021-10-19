@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,9 +11,18 @@ public class GameManager : MonoBehaviour
     public CinemachineVirtualCamera mainCamera;
     public CinemachineVirtualCamera menuCamera;
     public CinemachineVirtualCamera optionsCamera;
+
+    [Header("Canvas")]
     public GameObject gameCanvas;
     public GameObject pauseCanvas;
+    public GameObject gameOverCanvas;
     //public Canvas MainMenuCanvas;
+
+    [Header("Timer canvas")]
+    public TextMeshProUGUI timerText;
+    public TextMeshProUGUI totalText;
+    public float gameTime = 61f;
+    private float timeRemaining;
 
     [Header("Components to hide")]
     public GameObject[] objectsToHide;
@@ -27,6 +37,18 @@ public class GameManager : MonoBehaviour
     private GameObject tempRestaurant;
     private static bool reloaded = false;
     private static bool inPlay = false;
+    private bool gameHasEnded = false;
+    private int countDelivery = 0;
+
+    public float GetTimeRemaining()
+    {
+        return timeRemaining;
+    }
+
+    public void AddTime(float addingTime)
+    {
+        timeRemaining += addingTime;
+    }
 
     public bool IsInPlay()
     {
@@ -47,6 +69,14 @@ public class GameManager : MonoBehaviour
         gameCanvas.SetActive(true);
 
         Time.timeScale = 1f;
+    }
+
+    public void EndGame()
+    {
+        gameHasEnded = true;
+        gameOverCanvas.SetActive(true);
+        gameCanvas.SetActive(false);
+        totalText.SetText("Total delivery: " + countDelivery.ToString());
     }
 
     public void OpenOptions()
@@ -90,11 +120,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void Clicked()
-    {
-        Debug.Log("Mi hai cliccato");
-    }
-
     public void Restart()
     {
         reloaded = true;
@@ -113,6 +138,7 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         inPlay = true;
+        gameHasEnded = false;
         mainCamera.Priority = 1;
         menuCamera.Priority = 0;
 
@@ -172,6 +198,7 @@ public class GameManager : MonoBehaviour
     {
         //clients.Add(client);
         client.SetActive(false);
+        countDelivery++;
 
         DeAssignClient();
         AssignClient();
@@ -183,6 +210,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
+        timeRemaining = gameTime;
         PopulateList(restaurantsParent.GetComponentsInChildren<Transform>(), restaurants);
         PopulateList(clientsParent.GetComponentsInChildren<Transform>(), clients);
 
@@ -198,9 +226,11 @@ public class GameManager : MonoBehaviour
 
             pauseCanvas.SetActive(false);
             gameCanvas.SetActive(false);
+            gameOverCanvas.SetActive(false);
         }
         else
         {
+            gameOverCanvas.SetActive(false);
             pauseCanvas.SetActive(false);
             StartGame();
         }
@@ -209,6 +239,16 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(timeRemaining > 0 && inPlay)
+        {
+            timeRemaining -= Time.deltaTime;
+            if(timeRemaining > 0)
+                timerText.SetText(Mathf.FloorToInt(timeRemaining).ToString());
+            else
+                timerText.SetText("0");
+        }else if(timeRemaining <= 0 && !gameHasEnded)
+        {
+            EndGame();
+        }
     }
 }

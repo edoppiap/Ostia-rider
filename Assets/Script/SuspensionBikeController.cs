@@ -77,7 +77,7 @@ public class SuspensionBikeController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (gameManager.IsInPlay())
+        if (gameManager.IsInPlay() && gameManager.GetTimeRemaining() > 0)
         {
             if (isGrounded)
             {
@@ -99,7 +99,7 @@ public class SuspensionBikeController : MonoBehaviour
             
             Vector3 relativeTorque = transform.up * customHorizontalAxis * turnVelocity * isReversed;
             bodyRB.AddRelativeTorque(relativeTorque);
-            bodyRB.MoveRotation(Quaternion.Slerp(transform.rotation, rotateTo, alignToGroungTime * Time.deltaTime));
+            bodyRB.MoveRotation(Quaternion.Slerp(transform.rotation, rotateTo, alignToGroungTime * Time.deltaTime).normalized);
         }
     }
 }
