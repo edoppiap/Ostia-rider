@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     [Header("Timer canvas")]
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI totalText;
+    public TextMeshProUGUI addedTimeText;
+    public float timeAddedFor100Metres = 6f;
     public float gameTime = 61f;
     private float timeRemaining;
 
@@ -45,9 +47,18 @@ public class GameManager : MonoBehaviour
         return timeRemaining;
     }
 
+    IEnumerator FadeOut(GameObject gameObject, float time)
+    {
+        yield return new WaitForSeconds(time);
+        gameObject.SetActive(false);
+    }
+
     public void AddTime(float addingTime)
     {
+        addedTimeText.gameObject.SetActive(true);
+        addedTimeText.SetText("+" + Mathf.FloorToInt(addingTime).ToString());
         timeRemaining += addingTime;
+        StartCoroutine(FadeOut(addedTimeText.gameObject, 4f));
     }
 
     public bool IsInPlay()
@@ -73,6 +84,7 @@ public class GameManager : MonoBehaviour
 
     public void EndGame()
     {
+        inPlay = false;
         gameHasEnded = true;
         gameOverCanvas.SetActive(true);
         gameCanvas.SetActive(false);
@@ -137,6 +149,7 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
+        addedTimeText.gameObject.SetActive(false);
         inPlay = true;
         gameHasEnded = false;
         mainCamera.Priority = 1;
@@ -190,7 +203,7 @@ public class GameManager : MonoBehaviour
         DeactivateAll(restaurants);
         restaurant.GetComponent<ClienteAssegnato>().GetCliente().SetActive(true);
         tempRestaurant = restaurant;
-
+        AddTime(timeAddedFor100Metres*(restaurant.GetComponent<ClienteAssegnato>().GetDistanceFromClient())/100);
         AssignTarget(restaurant.GetComponent<ClienteAssegnato>().GetCliente().transform);
     }
 

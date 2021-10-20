@@ -77,13 +77,13 @@ public class SuspensionBikeController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (gameManager.IsInPlay() && gameManager.GetTimeRemaining() > 0)
+        if (gameManager.IsInPlay())
         {
             if (isGrounded)
             {
                 Vector3 force = transform.forward * customVerticalAxis * accelleration;
-                Vector3 applicationPos = transform.position - (Vector3.up);
-                bodyRB.AddForceAtPosition(force, applicationPos); //accellera la macchina
+                Vector3 applicationPos = transform.position - (.3f*Vector3.up);
+                bodyRB.AddForceAtPosition(force, applicationPos, ForceMode.Acceleration); //accellera la macchina
             }
             else
             {
@@ -98,7 +98,7 @@ public class SuspensionBikeController : MonoBehaviour
             }
             
             Vector3 relativeTorque = transform.up * customHorizontalAxis * turnVelocity * isReversed;
-            bodyRB.AddRelativeTorque(relativeTorque);
+            bodyRB.AddRelativeTorque(relativeTorque, ForceMode.Acceleration);
             bodyRB.MoveRotation(Quaternion.Slerp(transform.rotation, rotateTo, alignToGroungTime * Time.deltaTime).normalized);
         }
     }
