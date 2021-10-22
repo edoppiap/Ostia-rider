@@ -22,10 +22,16 @@ public class PointAt : MonoBehaviour
         this.target = target;
     }
 
+    private void Start()
+    {
+        if (transform.parent.CompareTag("Places"))
+            target = GameObject.Find("WheelColliderPlayer").transform;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if (target != null)
+        if (gameObject.activeSelf && target != null)
         {
             Vector3 direction = target.position - transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);
