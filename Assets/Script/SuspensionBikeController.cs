@@ -9,6 +9,8 @@ public class SuspensionBikeController : MonoBehaviour
     public float lateralForce = 50f;
     public LayerMask groundLayer;
     public float alignToGroungTime = 5f;
+    public float normalDrag = 5f;
+    public float lowDrag = .5f;
 
     private int customVerticalAxis = 0;
     private int customHorizontalAxis = 0;
@@ -16,11 +18,10 @@ public class SuspensionBikeController : MonoBehaviour
     private GameManager gameManager;
     private bool isGrounded;
     private Quaternion rotateTo;
-    private int isReversed = 1;
+    private float accelerationInterpolation = .5f;
 
     public void Accellera()
     {
-        isReversed = 1;
         customVerticalAxis = 1;
     }
 
@@ -31,13 +32,11 @@ public class SuspensionBikeController : MonoBehaviour
 
     public void Frena()
     {
-        isReversed = -1;
         customVerticalAxis = -1;
     }
 
     public void SterzaDx()
     {
-        isReversed = 1;
         customHorizontalAxis = 1;
     }
 
@@ -51,6 +50,33 @@ public class SuspensionBikeController : MonoBehaviour
         customHorizontalAxis = 0;
     }
 
+    //modifica il valore dell'interpolazione dell'accellerazione per dare l'effetto dell'inerzia
+    void AccellerationInterpolationModify()
+    {
+        if (customVerticalAxis != 0 && isGrounded)
+        {
+            if (customVerticalAxis == 1 && accelerationInterpolation < 1f)
+                accelerationInterpolation += Time.deltaTime;
+            if (customVerticalAxis == -1 && accelerationInterpolation > 0f)
+                accelerationInterpolation -= Time.deltaTime;
+        }
+        else
+        {
+            if (accelerationInterpolation > .5f)
+            {
+                accelerationInterpolation -= Time.deltaTime / 10;
+                if (accelerationInterpolation < .5f)
+                    accelerationInterpolation = .5f;
+            }
+            else if (accelerationInterpolation < .5f)
+            {
+                accelerationInterpolation += Time.deltaTime / 10;
+                if (accelerationInterpolation > .5f)
+                    accelerationInterpolation = .5f;
+            }
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -61,17 +87,17 @@ public class SuspensionBikeController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        AccellerationInterpolationModify();        
+
         //raycast ground check
         RaycastHit hit;
         isGrounded = Physics.Raycast(transform.position, -transform.up, out hit, 1f, groundLayer);
-        //isGrounded = Physics.Raycast(transform.position, -transform.up, 1f, groundLayer);
 
         //rotate the car parallel to the ground
         rotateTo = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
 
-        //transform.rotation = Quaternion.Slerp(transform.rotation, rotateTo, alignToGroungTime * Time.deltaTime);
-
-        bodyRB.drag = isGrounded ? 5f : .5f;     
+        //modifica l'attrito in base a se l'RB è a terra
+        bodyRB.drag = isGrounded ? normalDrag : lowDrag;     
 
     }
 
@@ -81,9 +107,9 @@ public class SuspensionBikeController : MonoBehaviour
         {
             if (isGrounded)
             {
-                Vector3 force = transform.forward * customVerticalAxis * accelleration;
-                Vector3 applicationPos = transform.position - (.3f*Vector3.up);
-                bodyRB.AddForceAtPosition(force, applicationPos, ForceMode.Acceleration); //accellera la macchina
+                Vector3 force = transform.forward * accelleration;
+                Vector3 applicationPos = transform.position - (.3f*Vector3.up); //dovrebbe spostare in basso il punto di applicazione
+                bodyRB.AddForceAtPosition(Vector3.Lerp(-force, force, accelerationInterpolation), applicationPos, ForceMode.Acceleration); //accellera il RB interpolando 
             }
             else
             {
@@ -97,9 +123,10 @@ public class SuspensionBikeController : MonoBehaviour
                 bodyRB.AddRelativeForce(new Vector3(-velocity * lateralForce, 0, 0));
             }
             
-            Vector3 relativeTorque = transform.up * customHorizontalAxis * turnVelocity * isReversed;
+            Vector3 relativeTorque = transform.up * customHorizontalAxis * turnVelocity; //formula che aggiunge la rotazione al RB
+            relativeTorque = accelerationInterpolation < .45f ? -relativeTorque : relativeTorque; //inverte lo sterzo se va in retromarcia
             bodyRB.AddRelativeTorque(relativeTorque, ForceMode.Acceleration);
-            bodyRB.MoveRotation(Quaternion.Slerp(transform.rotation, rotateTo, alignToGroungTime * Time.deltaTime).normalized);
+            bodyRB.MoveRotation(Quaternion.Slerp(transform.rotation, rotateTo, alignToGroungTime * Time.deltaTime).normalized); //ruota l'RB in base alla normale del suolo
         }
     }
 }

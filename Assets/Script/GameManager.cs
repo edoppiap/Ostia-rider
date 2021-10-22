@@ -16,12 +16,14 @@ public class GameManager : MonoBehaviour
     public GameObject gameCanvas;
     public GameObject pauseCanvas;
     public GameObject gameOverCanvas;
-    //public Canvas MainMenuCanvas;
+    public GameObject deliveryTimeCanvas;
 
-    [Header("Timer canvas")]
+    [Header("Timer and text canvas")]
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI totalText;
     public TextMeshProUGUI addedTimeText;
+    public TextMeshProUGUI deliveryTimeText;
+    public TextMeshProUGUI messageText;
     public float timeAddedFor100Metres = 6f;
     public float gameTime = 61f;
     private float timeRemaining;
@@ -34,6 +36,12 @@ public class GameManager : MonoBehaviour
     public GameObject clientsParent;
     public GameObject arrow;
 
+    [Header("Speed delivery variables")]
+    [Range(0f, 1f)]
+    public float minSpeedyBonus = .7f;
+    [Range(0f, 1f)]
+    public float minNormalBonus = .3f;
+
     private List<GameObject> restaurants = new List<GameObject>();
     private List<GameObject> clients = new List<GameObject>();
     private GameObject tempRestaurant;
@@ -41,6 +49,9 @@ public class GameManager : MonoBehaviour
     private static bool inPlay = false;
     private bool gameHasEnded = false;
     private int countDelivery = 0;
+    private float deliveryTimeRemaining = 100f;
+    private float deliveryTime;
+    private float startDeliveryTime;
 
     public float GetTimeRemaining()
     {
@@ -200,24 +211,108 @@ public class GameManager : MonoBehaviour
 
     public void StartDelivery(GameObject restaurant)
     {
+        ClienteAssegnato clienteAssegnato = restaurant.GetComponent<ClienteAssegnato>();
         DeactivateAll(restaurants);
-        restaurant.GetComponent<ClienteAssegnato>().GetCliente().SetActive(true);
+        clienteAssegnato.GetCliente().SetActive(true);
         tempRestaurant = restaurant;
-        AddTime(timeAddedFor100Metres*(restaurant.GetComponent<ClienteAssegnato>().GetDistanceFromClient())/100);
-        AssignTarget(restaurant.GetComponent<ClienteAssegnato>().GetCliente().transform);
+        AddTime(timeAddedFor100Metres*(clienteAssegnato.GetDistanceFromClient())/100);
+        CalculateDeliveryTime(clienteAssegnato.GetDistanceFromClient());
+        AssignTarget(clienteAssegnato.GetCliente().transform);
+        startDeliveryTime = Time.time;
+        deliveryTimeCanvas.gameObject.SetActive(true);
     }
 
-    public void EndDelivery(GameObject client)
+    void CalculateDeliveryTime(float distance)
     {
-        //clients.Add(client);
+        deliveryTimeRemaining = 20 * (distance / 100);
+        deliveryTimeRemaining = timeRemaining >= deliveryTimeRemaining ? deliveryTimeRemaining : timeRemaining;
+        deliveryTime = deliveryTimeRemaining;
+    }
+
+    void SetColorAndTextAndThenFadeOut(TextMeshProUGUI text, Color color, string stringa)
+    {
+        text.gameObject.SetActive(true);
+        text.SetText(stringa);
+        text.faceColor = color;
+        StartCoroutine(FadeOut(text.gameObject, 2f));
+    }
+
+    public void EndDelivery(GameObject client, bool done)
+    {
+        deliveryTimeCanvas.gameObject.SetActive(false);
+        if (deliveryTimeRemaining > deliveryTime * minSpeedyBonus)
+        {
+            AddTime(5f);
+            SetColorAndTextAndThenFadeOut(messageText, Color.green, "SPEEDY!");
+        }
+        else if (deliveryTimeRemaining > deliveryTime * minNormalBonus)
+        {
+            AddTime(2f);
+            SetColorAndTextAndThenFadeOut(messageText, Color.yellow, "NORMAL");
+        }
+        else if (done)
+        {
+            SetColorAndTextAndThenFadeOut(messageText, Color.red, "SLOW!");
+        }else
+        {
+            SetColorAndTextAndThenFadeOut(messageText, Color.red, "MISSED!");
+        }
+
         client.SetActive(false);
-        countDelivery++;
+        if(done)
+            countDelivery++;
 
         DeAssignClient();
         AssignClient();
         ReactivateAll(restaurants);
 
         DeAssignTarget();
+    }
+
+    void EndDelivery()
+    {
+        EndDelivery(tempRestaurant.GetComponent<ClienteAssegnato>().GetCliente(), false);
+    }
+
+    void SetTextIfNotMinusZero(TextMeshProUGUI text, float time)
+    {
+        if (time > 0)
+            text.SetText(Mathf.FloorToInt(time).ToString());
+        else
+            text.SetText("0");
+    }
+
+    void SetTextColorBasedOnSpeedDelivery()
+    {
+        if (deliveryTimeRemaining > deliveryTime * minSpeedyBonus)
+            deliveryTimeText.faceColor = Color.green;
+        else if (deliveryTimeRemaining > deliveryTime * minNormalBonus)
+            deliveryTimeText.faceColor = Color.yellow;
+        else
+            deliveryTimeText.faceColor = Color.red;
+    }
+
+    void CheckTime()
+    {
+        if (timeRemaining > 0 && inPlay)
+        {
+            timeRemaining -= Time.deltaTime;
+            SetTextIfNotMinusZero(timerText, timeRemaining);
+
+            if (deliveryTimeText.IsActive() && deliveryTimeRemaining > 0)
+            {
+                deliveryTimeRemaining -= Time.deltaTime;
+                SetTextIfNotMinusZero(deliveryTimeText, deliveryTimeRemaining);
+
+                SetTextColorBasedOnSpeedDelivery();
+            }
+            else if (deliveryTimeRemaining <= 0 && deliveryTimeText.IsActive())
+                EndDelivery();
+        }
+        else if (timeRemaining <= 0 && !gameHasEnded)
+        {
+            EndGame();
+        }
     }
 
     // Start is called before the first frame update
@@ -231,6 +326,9 @@ public class GameManager : MonoBehaviour
         AssignClient();
 
         arrow.SetActive(false);
+        deliveryTimeCanvas.transform.SetParent(GameObject.Find("WheelColliderPlayer").transform);
+        deliveryTimeCanvas.SetActive(false);
+        messageText.gameObject.SetActive(false);
 
         if (!reloaded)
         {
@@ -252,16 +350,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(timeRemaining > 0 && inPlay)
-        {
-            timeRemaining -= Time.deltaTime;
-            if(timeRemaining > 0)
-                timerText.SetText(Mathf.FloorToInt(timeRemaining).ToString());
-            else
-                timerText.SetText("0");
-        }else if(timeRemaining <= 0 && !gameHasEnded)
-        {
-            EndGame();
-        }
+        CheckTime();
     }
 }

@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class DetectCollision : MonoBehaviour
 {
+    private GameManager gameManager;
     // Start is called before the first frame update
     void Start()
     {
-        
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     // Update is called once per frame
@@ -18,12 +19,15 @@ public class DetectCollision : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if(Mathf.Abs(other.attachedRigidbody.velocity.z) <0.2f)
+        //la seconda condizione non viene valutata se la prima restituisce false
+        if (gameManager.IsInPlay() && 
+            other.CompareTag("Player") && 
+            Mathf.RoundToInt(other.attachedRigidbody.velocity.magnitude) == 0) 
         {
             if (name == "ParkingArea")
-                FindObjectOfType<GameManager>().StartDelivery(gameObject.transform.parent.gameObject);
+                gameManager.StartDelivery(gameObject.transform.parent.gameObject);
             else if (name == "ParkingSlot")
-                FindObjectOfType<GameManager>().EndDelivery(gameObject.transform.parent.gameObject);
+                gameManager.EndDelivery(gameObject.transform.parent.gameObject, true);
         }
     }
 }
