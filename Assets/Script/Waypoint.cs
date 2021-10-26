@@ -7,11 +7,12 @@ public class Waypoint : MonoBehaviour
     public Waypoint previousWaypoint;
     public Waypoint nextWaypoint;
     public bool busy;
+    public bool usableForSpawn = true;
 
     [Range(0f, 5f)]
-    public float width = 5f;
+    public float width = 1f;
 
-    public List<Waypoint> branches;
+    public List<Waypoint> branches = new List<Waypoint>();
 
     [Range(0f, 1f)]
     public float branchRatio = .5f;
@@ -22,12 +23,6 @@ public class Waypoint : MonoBehaviour
         Vector3 maxBound = transform.position - transform.right * width / 2f;
 
         return Vector3.Lerp(minBound, maxBound, Random.Range(0f, 1f));
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        branches = new List<Waypoint>();
     }
 
     // Update is called once per frame

@@ -8,20 +8,36 @@ public class TrafficCarController : MonoBehaviour
     public float rotationSpeed;
     public float stopDistance;
     public bool reachedDestination;
+    public bool hit = false;
 
     private Vector3 velocity;
     public Vector3 destination;
     private Vector3 lastPosition;
+    private GameObject player;
     // Start is called before the first frame update
     void Start()
     {
-        
+        player = GameObject.Find("WheelColliderPlayer");
+    }
+
+    private void OnBecameInvisible()
+    {
+        if (hit && Vector3.Distance(transform.position, player.transform.position) > 30f)
+            Destroy(gameObject);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (!collision.transform.CompareTag("Ground") && !collision.transform.CompareTag("Objects"))
+        {
+            hit = true;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(transform.position != destination)
+        if(transform.position != destination && !hit)
         {
             Vector3 destinationDirection = destination - transform.position;
             destinationDirection.y = 0;
