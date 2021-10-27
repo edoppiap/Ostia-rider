@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DisappearScript : MonoBehaviour
+public class FadeOutUIElement : MonoBehaviour
 { 
     public float fadeTime = 2f;
 

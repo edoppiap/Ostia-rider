@@ -6,7 +6,6 @@ public class Waypoint : MonoBehaviour
 {
     public Waypoint previousWaypoint;
     public Waypoint nextWaypoint;
-    public bool busy;
     public bool usableForSpawn = true;
 
     [Range(0f, 5f)]
@@ -17,12 +16,35 @@ public class Waypoint : MonoBehaviour
     [Range(0f, 1f)]
     public float branchRatio = .5f;
 
+    private BoxCollider addedCollider;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(!other.gameObject.CompareTag("Objects"))
+            usableForSpawn = false;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        usableForSpawn = true;
+    }
+
     public Vector3 GetPosition()
     {
         Vector3 minBound = transform.position + transform.right * width / 2f;
         Vector3 maxBound = transform.position - transform.right * width / 2f;
 
         return Vector3.Lerp(minBound, maxBound, Random.Range(0f, 1f));
+    }
+
+    private void Start()
+    {
+        addedCollider = gameObject.AddComponent<BoxCollider>();
+        addedCollider.size = new Vector3(8,1,8);
+        addedCollider.isTrigger = true;
+        addedCollider.center = Vector3.up;
+
+        gameObject.layer = 6;
     }
 
     // Update is called once per frame

@@ -6,23 +6,16 @@ public class RandomColor : MonoBehaviour
 {
     public Material[] materials;
 
-    private MeshRenderer meshRenderer;
+    private Renderer rendererComponent;
     // Start is called before the first frame update
     void Start()
     {
-
     }
-
-    void OnBecameInvisible()
+    private void Awake()
     {
-        if (transform.parent.GetComponent<TrafficCarController>().hit)
-            Destroy(transform.parent.gameObject);
-    }
-
-    void OnEnable()
-    {
-        meshRenderer = GetComponent<MeshRenderer>();
-        meshRenderer.materials[0] = materials[Random.Range(0, materials.Length)];
+        rendererComponent = GetComponent<Renderer>();
+        Material tempMaterial = materials[Random.Range(0, materials.Length)];
+        rendererComponent.material = tempMaterial;
     }
 
     // Update is called once per frame

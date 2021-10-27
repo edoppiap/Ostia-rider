@@ -8,6 +8,7 @@ TagManager:
   - Places
   - Ground
   - Objects
+  - Car
   layers:
   - Default
   - TransparentFX
@@ -15,11 +16,11 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - waypoints
   - Player
   - PostProcessing
   - groundLayer
-  - Motor
+  - 
   - Car
   - Place
   - ParkingArea

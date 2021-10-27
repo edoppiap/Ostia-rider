@@ -14,7 +14,6 @@ public class CarSpawner : MonoBehaviour
     void Start()
     {
         alreadyUsedForSpawn = new List<int>();
-        StartCoroutine(Spawn());
     }
 
     IEnumerator Spawn()
@@ -22,22 +21,32 @@ public class CarSpawner : MonoBehaviour
         while(parent.transform.childCount < carToSpawn)
         {
             GameObject obj = Instantiate(carPrefab[Random.Range(0, carPrefab.Length)]);
+            Transform tempWaypointTransform;
+            //Vector2 inCameraPosition;
+            //bool inCameraBool;
             int temp;
             do
             {
                 temp = Random.Range(0, transform.childCount - 1);
-            } while (alreadyUsedForSpawn.Contains(temp) && !transform.GetChild(temp).GetComponent<Waypoint>().usableForSpawn);
+                tempWaypointTransform = transform.GetChild(temp);
+
+                if (alreadyUsedForSpawn.Contains(temp))
+                    Debug.Log("Cioccato "+tempWaypointTransform.ToString());
+                
+                //inCameraPosition = Camera.main.WorldToViewportPoint(tempWaypointTransform.transform.position);
+                //inCameraBool = inCameraPosition.x > 0 && inCameraPosition.x < 1 && inCameraPosition.y > 0 && inCameraPosition.y < 1;
+                //} while (alreadyUsedForSpawn.Contains(temp) && !transform.GetChild(temp).GetComponent<Waypoint>().usableForSpawn);
+            } while (alreadyUsedForSpawn.Contains(temp) && !tempWaypointTransform.GetComponent<Waypoint>().usableForSpawn);
             alreadyUsedForSpawn.Add(temp);
 
-            Transform child = transform.GetChild(temp);
-            obj.GetComponent<WaypointNavigator>().currentWaypoint = child.GetComponent<Waypoint>();
-            obj.transform.position = child.position+ Vector3.up;
-            obj.transform.forward = -child.transform.forward;
+            obj.GetComponent<WaypointNavigator>().currentWaypoint = tempWaypointTransform.GetComponent<Waypoint>();
+            obj.transform.position = tempWaypointTransform.position+ Vector3.up;
+            obj.transform.forward = -tempWaypointTransform.transform.forward;
             obj.transform.SetParent(parent.transform);
 
             yield return new WaitForEndOfFrame();
         }
-
+        alreadyUsedForSpawn.Clear();
     }
 
     // Update is called once per frame

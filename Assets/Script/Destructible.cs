@@ -9,7 +9,7 @@ public class Destructible : MonoBehaviour
     private bool isAlreadySpawned = false;
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player") && !isAlreadySpawned)
+        if ((collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Car")) && !isAlreadySpawned)
         {
             isAlreadySpawned = true;
             Instantiate(destroyedVersion, transform.position, transform.rotation);
