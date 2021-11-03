@@ -7,6 +7,8 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    public PhysicMaterial zeroFrictionMaterial;
+
     [Header("Cameras")]
     public CinemachineVirtualCamera mainCamera;
     public CinemachineVirtualCamera menuCamera;
@@ -18,14 +20,17 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverCanvas;
     public GameObject deliveryTimeCanvas;
 
-    [Header("Timer and text canvas")]
+    [Header("Text component")]
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI totalText;
     public TextMeshProUGUI addedTimeText;
     public TextMeshProUGUI deliveryTimeText;
     public TextMeshProUGUI messageText;
+
+    [Header("Time parameters")]
     public float timeAddedFor100Metres = 6f;
     public float gameTime = 61f;
+    public int timeForDeliveryFor100Metres = 20;
     private float timeRemaining;
 
     [Header("Components to hide")]
@@ -224,7 +229,7 @@ public class GameManager : MonoBehaviour
 
     void CalculateDeliveryTime(float distance)
     {
-        deliveryTimeRemaining = 20 * (distance / 100);
+        deliveryTimeRemaining = timeForDeliveryFor100Metres * (distance / 100);
         deliveryTimeRemaining = timeRemaining >= deliveryTimeRemaining ? deliveryTimeRemaining : timeRemaining;
         deliveryTime = deliveryTimeRemaining;
     }
@@ -326,7 +331,7 @@ public class GameManager : MonoBehaviour
         AssignClient();
 
         arrow.SetActive(false);
-        deliveryTimeCanvas.transform.SetParent(GameObject.Find("WheelColliderPlayer").transform);
+        deliveryTimeCanvas.transform.SetParent(GameObject.Find("Borsone").transform);
         deliveryTimeCanvas.SetActive(false);
         messageText.gameObject.SetActive(false);
 
@@ -351,5 +356,9 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         CheckTime();
+        if (!inPlay)
+            zeroFrictionMaterial.dynamicFriction = 1f;
+        else
+            zeroFrictionMaterial.dynamicFriction = 0f;
     }
 }

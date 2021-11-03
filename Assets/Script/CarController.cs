@@ -15,8 +15,11 @@ public class CarController : MonoBehaviour
     private float lastVelocity = 0;
 
     private int customVerticalAxis = 0;
+    private int customHorizontalAxis = 0;
     private float moveInputLearped;
     private float timePassed = 0;
+
+    private GameManager gameManager;
 
     [Header("Drag")]
     public float airDrag;
@@ -27,76 +30,80 @@ public class CarController : MonoBehaviour
     public float brakeSensitivity;
     public float revSpeed;
     public float turnSpeed;
+    public float lateralForce = 50f;
+    public float maxSpeed = 30f;
     public float alignToGroungTime = 5;
     public LayerMask groundLayer;
     
     [Header("RigidBody")]
     public Rigidbody sphereRB;
-    public Rigidbody colliderRB;
+    public Transform colliderTransform;
 
     public void SterzaDx()
     {
-        turnInput = moveInput != 0 ? 1 : 0;
+        customHorizontalAxis = 1;
+        //turnInput = moveInput != 0 ? 1 : 0;
     }
 
     public void SterzaSx()
     {
-        turnInput = moveInput != 0 ? -1 : 0;
+        customHorizontalAxis = -1;
+        //turnInput = moveInput != 0 ? -1 : 0;
     }
 
     public void DeSterza()
     {
-        turnInput = 0;
+        customHorizontalAxis = 0;
+        //turnInput = 0;
     }
 
     public void Accellera()
     {
         customVerticalAxis = 1;
-        sphereRB.drag = 4f;
-        moveInput = fwdSpeed;
+        //sphereRB.drag = 4f;
+        //moveInput = fwdSpeed;
     }
 
     public void Decellera()
     {
         customVerticalAxis = 0;
-        sphereRB.drag = .01f;
-        moveInput = 0;
+        //sphereRB.drag = .01f;
+        //moveInput = 0;
     }
 
     public void Frena()
     {
         customVerticalAxis = -1;
-        moveInput = -revSpeed;
-    }
-
-    public void DeFrena()
-    {
-        customVerticalAxis = 0;
-        moveInput = 0;
+        //moveInput = revSpeed;
     }
 
     // Start is called before the first frame update
     void Start()
     {
         sphereRB.transform.parent = null;
-        colliderRB.transform.parent = null;
-        normalDrag = sphereRB.drag;
+        //colliderRB.transform.parent = null;
+        //normalDrag = sphereRB.drag;
+
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(moveInput != 0)
+        /*if(moveInput != 0)
             timePassed += Time.deltaTime;
         else
             timePassed = 0;
-        moveInputLearped = Mathf.Lerp(0, moveInput, timePassed);
+        moveInputLearped = Mathf.Lerp(0, moveInput, timePassed);*/
         
         //seguire la sfera
         transform.position = sphereRB.transform.position;
+        transform.rotation = sphereRB.transform.rotation;
+        colliderTransform.position = sphereRB.transform.position;
+        colliderTransform.rotation = sphereRB.transform.rotation;
         //sterzare
-        float newRotation = turnInput * turnSpeed * Time.deltaTime * customVerticalAxis;
-        transform.Rotate(0, newRotation, 0, Space.World);
+        //float newRotation = turnInput * turnSpeed * Time.deltaTime * customVerticalAxis;
+        //transform.Rotate(0, newRotation, 0, Space.World);
 
         //raycast ground check
         RaycastHit hit;
@@ -107,7 +114,7 @@ public class CarController : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, rotateTo, alignToGroungTime * Time.deltaTime);
 
         //aggiusta l'attrito in base a se è a terra o no
-        sphereRB.drag = isCarGrounded ? normalDrag : airDrag;
+        //sphereRB.drag = isCarGrounded ? normalDrag : airDrag;
 
     }
 
@@ -118,12 +125,34 @@ public class CarController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isCarGrounded)
-            sphereRB.AddForce(transform.forward * moveInputLearped, ForceMode.Acceleration); //muove la macchina
-        else
-            sphereRB.AddForce(transform.up * -50f); //aggiunge la gravità
+        if (gameManager.IsInPlay())
+        {
+            if (isCarGrounded)
+            {
+                Vector3 fwdForce = sphereRB.transform.forward * fwdSpeed * customVerticalAxis;
+                Vector3 ltForce = Vector3.zero;
+                //sphereRB.AddForce(sphereRB.transform.forward * moveInput * customVerticalAxis); //muove la macchina
 
-        colliderRB.MoveRotation(transform.rotation);
+                Vector3 lateralVelocity = Vector3.Dot(sphereRB.transform.right, sphereRB.velocity) * sphereRB.transform.right;
+                //float lateralAccelleration = lateralVelocity.magnitude;
+                if (lateralVelocity.magnitude > 0)
+                {
+                    ltForce = -lateralVelocity * lateralForce * sphereRB.mass;
+                    //sphereRB.AddForce(-lateralDownforce * lateralVelocity.magnitude * lateralForce * sphereRB.mass);
+                }
+
+                sphereRB.AddForce(fwdForce + ltForce);
+                sphereRB.AddTorque(sphereRB.transform.up * turnSpeed * customHorizontalAxis);
+            }
+            //else
+            //sphereRB.AddForce(transform.up * -50f); //aggiunge la gravità
+
+            sphereRB.velocity = Vector3.ClampMagnitude(sphereRB.velocity, maxSpeed);
+
+
+            //colliderTransform.MoveRotation(transform.rotation);
+            //colliderTransform.MovePosition(transform.position);
+        }
     }
 
     public bool isGrounded()

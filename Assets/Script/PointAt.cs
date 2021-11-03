@@ -25,7 +25,7 @@ public class PointAt : MonoBehaviour
     private void Start()
     {
         if (transform.parent.CompareTag("Places"))
-            target = GameObject.Find("WheelColliderPlayer").transform;
+            target = GameObject.Find("Corpo_Centrale").transform;
     }
 
     // Update is called once per frame

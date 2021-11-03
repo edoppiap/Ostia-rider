@@ -23,10 +23,13 @@ public class SuspensionBikeController : MonoBehaviour
     public float maxSpeed = 50f;
     public float turnVelocity = 50f;
     public float lateralForce = 50f;
+    public float recenterTorque = 5f;
+    public float torqueStabilizer = 50f;
     public LayerMask groundLayer;
-    public float alignToGroungTime = 5f;
-    public float normalDrag = 5f;
-    public float lowDrag = .5f;
+    //public float alignToGroungTime = 5f;
+    //public float normalDrag = 5f;
+    //public float lowDrag = .5f;
+    public float differentAngle;
     public float applicationDeltaPoint = -1.2f;
 
     private int customVerticalAxis = 0;
@@ -119,15 +122,15 @@ public class SuspensionBikeController : MonoBehaviour
 
         //raycast ground check
         RaycastHit hit;
-        isGrounded = Physics.Raycast(bodyRb.position, -Vector3.up, out hit, 1f, groundLayer);
+        isGrounded = Physics.Raycast(bodyRb.position, -bodyRb.transform.up, out hit, 1f, groundLayer);
 
         if (isGrounded)
         {
-            Debug.DrawRay(bodyRb.position, -Vector3.up * hit.distance, Color.yellow);
+            Debug.DrawRay(bodyRb.position, -bodyRb.transform.up * hit.distance, Color.yellow);
         }
         else
         {
-            Debug.DrawRay(bodyRb.position, -Vector3.up * 1f, Color.white);
+            Debug.DrawRay(bodyRb.position, -bodyRb.transform.up * 1f, Color.white);
         }
 
         //rotate the car parallel to the ground
@@ -138,19 +141,33 @@ public class SuspensionBikeController : MonoBehaviour
 
     }
 
+    void Stabilizer()
+    {
+        Vector3 axisFromRotate = Vector3.Cross(bodyRb.transform.up, Vector3.up);
+        Vector3 torqueForce = axisFromRotate.normalized * axisFromRotate.magnitude * torqueStabilizer;
+        //torqueForce.x *= .4f;
+        torqueForce -= bodyRb.angularVelocity;
+        bodyRb.AddTorque(torqueForce * bodyRb.mass * .02f, ForceMode.Impulse);
+    }
+
     private void FixedUpdate()
     {
         if (gameManager.IsInPlay())
         {
             Vector3 accelleration = Vector3.zero;
+            Vector3 torque = Vector3.zero;
             if (isGrounded)
             {
-                accelleration = bodyRb.transform.forward * this.accelleration * customVerticalAxis;
+                bodyRb.AddForceAtPosition(bodyRb.transform.forward * this.accelleration * customVerticalAxis, bodyRb.transform.position + (bodyRb.transform.up * applicationDeltaPoint));
+                //accelleration = bodyRb.transform.forward * this.accelleration * customVerticalAxis;
+                torque = bodyRb.transform.up * turnVelocity * customHorizontalAxis;
             }
-            Vector3 torque = bodyRb.transform.up * turnVelocity * customHorizontalAxis;
+            else
+            {
+                bodyRb.AddForce(-Vector3.up * 100f);
+            }
 
             //bodyRb.AddRelativeForce(force);
-            bodyRb.AddForceAtPosition(accelleration, bodyRb.transform.position + (bodyRb.transform.up * applicationDeltaPoint));
             bodyRb.AddTorque(torque);
 
             bodyRb.velocity = Vector3.ClampMagnitude(bodyRb.velocity, maxSpeed);
@@ -162,8 +179,16 @@ public class SuspensionBikeController : MonoBehaviour
                 //ltForce = -lateralVelocity * lateralForce * sphereRB.mass;
                 bodyRb.AddForce(-lateralVelocity * lateralForce * bodyRb.mass);
             }
+
+            //bodyRb.AddTorque(-differentAngle * recenterTorque * bodyRb.transform.forward);
+
+            //frontWheelRb.centerOfMass = frontWheelRb.transform.position + (-frontWheelRb.transform.up * centerOfMass);
+            //backWheelRb.centerOfMass = backWheelRb.transform.position + (-backWheelRb.transform.up * centerOfMass);
+
+            //bodyRb.centerOfMass = bodyRb.transform.position + (-bodyRb.transform.up * centerOfMass);
         }
 
+        Stabilizer();
 
 
         /*if (gameManager.IsInPlay())
