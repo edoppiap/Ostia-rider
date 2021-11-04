@@ -19,26 +19,41 @@ public class SuspensionBikeController : MonoBehaviour
     public Transform backWheelTransform;
 
     [Header("Parameters")]
-    public float accelleration = 50f;
+    public float accellerationForce = 1500f;
     public float maxSpeed = 50f;
     public float turnVelocity = 50f;
     public float lateralForce = 50f;
     public float recenterTorque = 5f;
     public float torqueStabilizer = 50f;
     public LayerMask groundLayer;
-    //public float alignToGroungTime = 5f;
-    //public float normalDrag = 5f;
-    //public float lowDrag = .5f;
-    public float differentAngle;
     public float applicationDeltaPoint = -1.2f;
 
     private int customVerticalAxis = 0;
     private int customHorizontalAxis = 0;
-    //private Rigidbody bodyRB;
     private GameManager gameManager;
+    private Vector3 lateralVelocity = Vector3.zero;
     private bool isGrounded;
-    private Quaternion rotateTo;
-    private float accelerationInterpolation = .5f;
+
+    //accelleration parameters
+    private float accelleration;
+    private float lastVelocity = 0;
+
+    void CalculateAccelleration()
+    {
+        float velocity = Vector3.Dot(bodyRb.transform.forward, bodyRb.velocity);
+        accelleration = (velocity - lastVelocity) / Time.deltaTime;
+        lastVelocity = velocity;
+    }
+
+    public float GetAccelleration()
+    {
+        return accelleration;
+    }
+
+    public bool IsGrounded()
+    {
+        return isGrounded;
+    }
 
     public void Accellera()
     {
@@ -70,37 +85,9 @@ public class SuspensionBikeController : MonoBehaviour
         customHorizontalAxis = 0;
     }
 
-    //modifica il valore dell'interpolazione dell'accellerazione per dare l'effetto dell'inerzia
-    void AccellerationInterpolationModify()
-    {
-        if (customVerticalAxis != 0 && isGrounded)
-        {
-            if (customVerticalAxis == 1 && accelerationInterpolation < 1f)
-                accelerationInterpolation += Time.deltaTime;
-            if (customVerticalAxis == -1 && accelerationInterpolation > 0f)
-                accelerationInterpolation -= Time.deltaTime;
-        }
-        else
-        {
-            if (accelerationInterpolation > .5f)
-            {
-                accelerationInterpolation -= Time.deltaTime / 10;
-                if (accelerationInterpolation < .5f)
-                    accelerationInterpolation = .5f;
-            }
-            else if (accelerationInterpolation < .5f)
-            {
-                accelerationInterpolation += Time.deltaTime / 10;
-                if (accelerationInterpolation > .5f)
-                    accelerationInterpolation = .5f;
-            }
-        }
-    }
-
     // Start is called before the first frame update
     void Start()
     {
-        //bodyRB = GetComponent<Rigidbody>();
         gameManager = FindObjectOfType<GameManager>();
     }
 
@@ -114,11 +101,7 @@ public class SuspensionBikeController : MonoBehaviour
         backWheelTransform.rotation = backWheelRb.transform.rotation;
 
         bodyTransform.position = bodyRb.transform.position + (Vector3.up * - 0.283f);
-        bodyTransform.rotation = bodyRb.transform.rotation;
-
-
-
-        //AccellerationInterpolationModify();        
+        bodyTransform.rotation = bodyRb.transform.rotation;    
 
         //raycast ground check
         RaycastHit hit;
@@ -158,8 +141,8 @@ public class SuspensionBikeController : MonoBehaviour
             Vector3 torque = Vector3.zero;
             if (isGrounded)
             {
-                bodyRb.AddForceAtPosition(bodyRb.transform.forward * this.accelleration * customVerticalAxis, bodyRb.transform.position + (bodyRb.transform.up * applicationDeltaPoint));
-                //accelleration = bodyRb.transform.forward * this.accelleration * customVerticalAxis;
+                bodyRb.AddForceAtPosition(bodyRb.transform.forward * accellerationForce * customVerticalAxis, 
+                    bodyRb.transform.position + (bodyRb.transform.up * applicationDeltaPoint));
                 torque = bodyRb.transform.up * turnVelocity * customHorizontalAxis;
             }
             else
@@ -167,55 +150,50 @@ public class SuspensionBikeController : MonoBehaviour
                 bodyRb.AddForce(-Vector3.up * 100f);
             }
 
-            //bodyRb.AddRelativeForce(force);
             bodyRb.AddTorque(torque);
 
             bodyRb.velocity = Vector3.ClampMagnitude(bodyRb.velocity, maxSpeed);
 
-            Vector3 lateralVelocity = Vector3.Dot(bodyRb.transform.right, bodyRb.velocity) * bodyRb.transform.right;
-            //float lateralAccelleration = lateralVelocity.magnitude;
+            lateralVelocity = Vector3.Dot(bodyRb.transform.right, bodyRb.velocity) * bodyRb.transform.right;
+
             if (lateralVelocity.magnitude > 0)
             {
-                //ltForce = -lateralVelocity * lateralForce * sphereRB.mass;
                 bodyRb.AddForce(-lateralVelocity * lateralForce * bodyRb.mass);
             }
 
-            //bodyRb.AddTorque(-differentAngle * recenterTorque * bodyRb.transform.forward);
-
-            //frontWheelRb.centerOfMass = frontWheelRb.transform.position + (-frontWheelRb.transform.up * centerOfMass);
-            //backWheelRb.centerOfMass = backWheelRb.transform.position + (-backWheelRb.transform.up * centerOfMass);
-
-            //bodyRb.centerOfMass = bodyRb.transform.position + (-bodyRb.transform.up * centerOfMass);
         }
-
         Stabilizer();
+        CalculateAccelleration();
 
-
-        /*if (gameManager.IsInPlay())
         {
-            if (isGrounded)
-            {
-                Vector3 force = transform.forward * accelleration;
-                Vector3 applicationPos = transform.position - (.3f*Vector3.up); //dovrebbe spostare in basso il punto di applicazione
-                bodyRB.AddForceAtPosition(Vector3.Lerp(-force, force, accelerationInterpolation), applicationPos, ForceMode.Acceleration); //accellera il RB interpolando 
-            }
-            else
-            {
-                Vector3 gravity = transform.up * -50f;
-                bodyRB.AddRelativeForce(gravity);
-            }
 
-            float velocity = bodyRB.velocity.x;
-            if (Mathf.Abs(velocity) > 0)
+            /*if (gameManager.IsInPlay())
             {
-                bodyRB.AddRelativeForce(new Vector3(-velocity * lateralForce, 0, 0));
-            }
-            
-            Vector3 relativeTorque = transform.up * customHorizontalAxis * turnVelocity; //formula che aggiunge la rotazione al RB
-            relativeTorque = accelerationInterpolation < .45f ? -relativeTorque : relativeTorque; //inverte lo sterzo se va in retromarcia
-            bodyRB.AddRelativeTorque(relativeTorque, ForceMode.Acceleration);
-            bodyRB.MoveRotation(Quaternion.Slerp(transform.rotation, rotateTo, alignToGroungTime * Time.deltaTime).normalized); //ruota l'RB in base alla normale del suolo
-        }*/
+                if (isGrounded)
+                {
+                    Vector3 force = transform.forward * accelleration;
+                    Vector3 applicationPos = transform.position - (.3f*Vector3.up); //dovrebbe spostare in basso il punto di applicazione
+                    bodyRB.AddForceAtPosition(Vector3.Lerp(-force, force, accelerationInterpolation), applicationPos, ForceMode.Acceleration); //accellera il RB interpolando 
+                }
+                else
+                {
+                    Vector3 gravity = transform.up * -50f;
+                    bodyRB.AddRelativeForce(gravity);
+                }
+
+                float velocity = bodyRB.velocity.x;
+                if (Mathf.Abs(velocity) > 0)
+                {
+                    bodyRB.AddRelativeForce(new Vector3(-velocity * lateralForce, 0, 0));
+                }
+
+                Vector3 relativeTorque = transform.up * customHorizontalAxis * turnVelocity; //formula che aggiunge la rotazione al RB
+                relativeTorque = accelerationInterpolation < .45f ? -relativeTorque : relativeTorque; //inverte lo sterzo se va in retromarcia
+                bodyRB.AddRelativeTorque(relativeTorque, ForceMode.Acceleration);
+                bodyRB.MoveRotation(Quaternion.Slerp(transform.rotation, rotateTo, alignToGroungTime * Time.deltaTime).normalized); //ruota l'RB in base alla normale del suolo
+            }*/
+
+        }
 
 
     }

@@ -17,7 +17,7 @@ public class WaypointNavigator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        controller.SetDestination(currentWaypoint.GetPosition());
+        //controller.SetDestination(currentWaypoint.GetPosition());
     }
 
     // Update is called once per frame

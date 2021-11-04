@@ -6,7 +6,8 @@ public class Waypoint : MonoBehaviour
 {
     public Waypoint previousWaypoint;
     public Waypoint nextWaypoint;
-    public bool usableForSpawn = true;
+    public bool usableForSpawn;
+    public LayerMask layerMask = 7 & 11;
 
     [Range(0f, 5f)]
     public float width = 1f;
@@ -16,18 +17,7 @@ public class Waypoint : MonoBehaviour
     [Range(0f, 1f)]
     public float branchRatio = .5f;
 
-    private BoxCollider addedCollider;
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if(!other.gameObject.CompareTag("Objects"))
-            usableForSpawn = false;
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        usableForSpawn = true;
-    }
+    private Collider[] hitColliders;
 
     public Vector3 GetPosition()
     {
@@ -39,10 +29,7 @@ public class Waypoint : MonoBehaviour
 
     private void Start()
     {
-        addedCollider = gameObject.AddComponent<BoxCollider>();
-        addedCollider.size = new Vector3(8,1,8);
-        addedCollider.isTrigger = true;
-        addedCollider.center = Vector3.up;
+        usableForSpawn = true;
 
         gameObject.layer = 6;
     }
@@ -50,6 +37,10 @@ public class Waypoint : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        hitColliders = Physics.OverlapSphere(transform.position, 5f, layerMask);
+        if (hitColliders.Length > 0)
+            usableForSpawn = false;
+        else
+            usableForSpawn = true;
     }
 }

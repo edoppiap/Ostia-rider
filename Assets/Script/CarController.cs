@@ -10,14 +10,14 @@ public class CarController : MonoBehaviour
     //set cars position to sphere
 
     private float moveInput;
-    private float turnInput;
+    //private float turnInput;
     private bool isCarGrounded;
     private float lastVelocity = 0;
 
     private int customVerticalAxis = 0;
     private int customHorizontalAxis = 0;
-    private float moveInputLearped;
-    private float timePassed = 0;
+    //private float moveInputLearped;
+    //private float timePassed = 0;
 
     private GameManager gameManager;
 
