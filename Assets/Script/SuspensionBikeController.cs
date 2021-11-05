@@ -129,6 +129,7 @@ public class SuspensionBikeController : MonoBehaviour
         Vector3 axisFromRotate = Vector3.Cross(bodyRb.transform.up, Vector3.up);
         Vector3 torqueForce = axisFromRotate.normalized * axisFromRotate.magnitude * torqueStabilizer;
         //torqueForce.x *= .4f;
+        torqueForce.z *= .4f;
         torqueForce -= bodyRb.angularVelocity;
         bodyRb.AddTorque(torqueForce * bodyRb.mass * .02f, ForceMode.Impulse);
     }
