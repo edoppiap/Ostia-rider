@@ -38,6 +38,11 @@ public class SuspensionBikeController : MonoBehaviour
     private float accelleration;
     private float lastVelocity = 0;
 
+    public float GetAccellerationForce()
+    {
+        return accellerationForce * customVerticalAxis;
+    }
+
     void CalculateAccelleration()
     {
         float velocity = Vector3.Dot(bodyRb.transform.forward, bodyRb.velocity);
@@ -138,7 +143,7 @@ public class SuspensionBikeController : MonoBehaviour
     {
         if (gameManager.IsInPlay())
         {
-            Vector3 accelleration = Vector3.zero;
+            //Vector3 accelleration = Vector3.zero;
             Vector3 torque = Vector3.zero;
             if (isGrounded)
             {

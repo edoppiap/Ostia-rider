@@ -23,7 +23,7 @@ public class BounceAndRotate : MonoBehaviour
 
         //LeanTween.init(800);
         if (bounce)
-            LeanTween.moveY(gameObject, 10f, 0.3f).setLoopPingPong();
+            LeanTween.moveY(gameObject, 7f, 0.3f).setLoopPingPong();
         if (degrees == 360f)
             LeanTween.rotateAround(gameObject, rotate, degrees, time).setLoopClamp();
         else

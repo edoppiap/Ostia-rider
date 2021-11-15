@@ -128,3 +128,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   destroyedVersion: {fileID: 3189548272669940218, guid: 16f14dd58cda9384a8651948e06d347a,
     type: 3}
+  distructEffect: {fileID: 0}
+  ParticlesAtPosition: 0
+  ParticlesAtContactPoint: 0
+  destroyTag:
+  - Player
+  - Car

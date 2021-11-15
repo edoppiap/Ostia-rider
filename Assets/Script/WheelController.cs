@@ -3,10 +3,12 @@
 public class WheelController : MonoBehaviour
 {
     public Transform frontWheel;
+    public SphereCollider frontWheelCollider;
     public Transform backWheel;
-    public float rotationSpeed = 30f;
 
     private SuspensionBikeController suspensionBikeController;
+    private Rigidbody frontWheelRb;
+    private bool frontWheelGrounded;
 
     Vector3 Abs(Vector3 v)
     {
@@ -54,14 +56,27 @@ public class WheelController : MonoBehaviour
     void Start()
     {
         suspensionBikeController = GetComponent<SuspensionBikeController>();
+        frontWheelRb = frontWheelCollider.attachedRigidbody;
     }
 
     // Update is called once per frame
     void Update()
     {
-        float isReversed = Input.touchCount == 2 ? 1 : -1;
+        //public static bool Raycast(Vector3 origin, Vector3 direction, out RaycastHit hitInfo, float maxDistance);
+        //raycast ground check
+        RaycastHit hit;
+        frontWheelGrounded = Physics.Raycast(frontWheelCollider.transform.position, -frontWheelCollider.transform.up, out hit, frontWheelCollider.radius);
+        if (frontWheelGrounded)
+        {
+            Debug.DrawRay(frontWheelCollider.transform.position, -frontWheelCollider.transform.transform.up * hit.distance, Color.yellow);
+        }
+        else
+        {
+            Debug.DrawRay(frontWheelCollider.transform.position, -frontWheelCollider.transform.transform.up * frontWheelCollider.radius, Color.white);
+        }
+        float fwrVelocity = frontWheelGrounded ? Vector3.Dot(frontWheelRb.transform.forward, frontWheelRb.velocity) * 100 : 0f;
 
-        //backWheel.Rotate(Vector3.right, rotationSpeed * Time.deltaTime);
-        //wheel.transform.Rotate(0, 0, rotationSpeed * isReversed * Time.deltaTime, Space.Self);
+        backWheel.Rotate(Vector3.right, suspensionBikeController.GetAccellerationForce() * Time.deltaTime);
+        frontWheel.Rotate(Vector3.right, fwrVelocity * Time.deltaTime);
     }
 }
