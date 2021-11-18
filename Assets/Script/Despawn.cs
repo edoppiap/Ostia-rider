@@ -8,7 +8,7 @@ public class Despawn : MonoBehaviour
     void OnBecameInvisible()
     {
         if (transform.parent.GetComponent<TrafficCarController>().touched && 
-            (transform.parent.GetComponent<Rigidbody>().velocity.magnitude == 0 || transform.position.y < -15f))
+            (transform.parent.GetComponent<Rigidbody>().velocity.magnitude <= 0.2 || transform.position.y < -15f))
             carSpawner.DisableCar(transform.parent.gameObject);
                 //Destroy(transform.parent.gameObject);
 

@@ -331,7 +331,7 @@ public class GameManager : MonoBehaviour
         AssignClient();
 
         arrow.SetActive(false);
-        deliveryTimeCanvas.transform.SetParent(GameObject.Find("Borsone").transform);
+        deliveryTimeCanvas.transform.SetParent(GameObject.Find("Portacibo").transform);
         deliveryTimeCanvas.SetActive(false);
         messageText.gameObject.SetActive(false);
 

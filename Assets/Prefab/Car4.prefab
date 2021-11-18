@@ -274,7 +274,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 623859142471645798}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.77, z: 0}
+  m_LocalPosition: {x: 0, y: 1.55, z: 0}
   m_LocalScale: {x: 120, y: 120, z: 120}
   m_Children:
   - {fileID: 623859142471280196}
@@ -476,7 +476,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3464625348164216370}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.76, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 623859142471280198}
@@ -494,8 +494,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.3517354, y: 2.7980626, z: 5.5907984}
-  m_Center: {x: 0.00000011920929, y: 0.63123477, z: 0.012752414}
+  m_Size: {x: 2.3517354, y: 2.5383766, z: 5.5907984}
+  m_Center: {x: 0.00000011920929, y: 1.254481, z: 0.012752533}
 --- !u!54 &7365913360133619313
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -510,7 +510,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 0
+  m_Constraints: 4
   m_CollisionDetection: 3
 --- !u!114 &3940205990093178586
 MonoBehaviour:
@@ -536,6 +536,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   destination: {x: 0, y: 0, z: 0}
+  move: 1
 --- !u!114 &4091351819088541329
 MonoBehaviour:
   m_ObjectHideFlags: 0

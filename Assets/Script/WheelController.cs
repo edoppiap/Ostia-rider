@@ -2,9 +2,17 @@
 
 public class WheelController : MonoBehaviour
 {
-    public Transform frontWheel;
+    [Header("Motorbike parts")]
+    public Transform frontWheelMesh;
+    public Transform frontWheelTransform;
     public SphereCollider frontWheelCollider;
-    public Transform backWheel;
+    public Transform backWheelMesh;
+    public Transform manubrio;
+    public Transform parafanghi;
+
+    [Header("Parameters")]
+    public float rotateAngle = 20f;
+    public float rightAngle = 5f;
 
     private SuspensionBikeController suspensionBikeController;
     private Rigidbody frontWheelRb;
@@ -76,7 +84,14 @@ public class WheelController : MonoBehaviour
         }
         float fwrVelocity = frontWheelGrounded ? Vector3.Dot(frontWheelRb.transform.forward, frontWheelRb.velocity) * 100 : 0f;
 
-        backWheel.Rotate(Vector3.right, suspensionBikeController.GetAccellerationForce() * Time.deltaTime);
-        frontWheel.Rotate(Vector3.right, fwrVelocity * Time.deltaTime);
+        //wheels rotation
+        backWheelMesh.Rotate(Vector3.right, suspensionBikeController.GetAccellerationForce() * Time.deltaTime);
+        frontWheelMesh.Rotate(Vector3.right, fwrVelocity * Time.deltaTime);
+
+        //wheel direction
+        frontWheelTransform.localEulerAngles = Vector3.up * suspensionBikeController.GetCustomHorizontal() * rotateAngle;
+        manubrio.localEulerAngles = new Vector3(-suspensionBikeController.GetCustomHorizontal() * 5f, suspensionBikeController.GetCustomHorizontal() * rotateAngle/2, 0f);
+        //parafanghi.localEulerAngles =  Vector3.up* suspensionBikeController.GetCustomHorizontal() * rotateAngle;
+        //frontWheel.Rotate(frontWheel.up, suspensionBikeController.GetCustomHorizontal()*20f);
     }
 }

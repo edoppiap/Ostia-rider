@@ -22,7 +22,7 @@ public class DetectCollision : MonoBehaviour
         //la seconda condizione non viene valutata se la prima restituisce false
         if (gameManager.IsInPlay() && 
             other.CompareTag("Player") && 
-            Mathf.RoundToInt(other.attachedRigidbody.velocity.magnitude) == 0) 
+            other.attachedRigidbody.velocity.magnitude <= .5f) 
         {
             if (name == "ParkingArea")
                 gameManager.StartDelivery(gameObject.transform.parent.gameObject);

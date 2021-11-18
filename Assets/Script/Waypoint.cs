@@ -6,6 +6,7 @@ public class Waypoint : MonoBehaviour
 {
     public Waypoint previousWaypoint;
     public Waypoint nextWaypoint;
+    public bool deSpawn;
     public bool usableForSpawn;
     public LayerMask layerMask = 7 & 11;
 
@@ -37,7 +38,7 @@ public class Waypoint : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        hitColliders = Physics.OverlapSphere(transform.position, 5f, layerMask);
+        hitColliders = Physics.OverlapSphere(transform.position, 10f, layerMask);
         if (hitColliders.Length > 0)
             usableForSpawn = false;
         else

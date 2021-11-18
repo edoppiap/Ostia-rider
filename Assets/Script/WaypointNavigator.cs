@@ -6,7 +6,18 @@ public class WaypointNavigator : MonoBehaviour
 {
 
     TrafficCarController controller;
+    CarSpawner carSpawner;
     public Waypoint currentWaypoint;
+
+    public void SetCarSpawner(CarSpawner spawner)
+    {
+        carSpawner = spawner;
+    }
+
+    public void Despawn()
+    {
+        carSpawner.DisableCar(controller.gameObject);
+    }
 
 
     private void Awake()
@@ -38,8 +49,17 @@ public class WaypointNavigator : MonoBehaviour
             }
             else
             {
-                currentWaypoint = currentWaypoint.nextWaypoint;
-                controller.SetDestination(currentWaypoint.GetPosition());
+                if(currentWaypoint.nextWaypoint != null)
+                {
+                    currentWaypoint = currentWaypoint.nextWaypoint;
+                    controller.SetDestination(currentWaypoint.GetPosition());
+                }
+            }
+
+
+            if (currentWaypoint.deSpawn)
+            {
+                Despawn();
             }
 
         }

@@ -26,7 +26,8 @@ public class SuspensionBikeController : MonoBehaviour
     public float recenterTorque = 5f;
     public float torqueStabilizer = 50f;
     public LayerMask groundLayer;
-    public float applicationDeltaPoint = -1.2f;
+    public float applicationDeltaPoint = .7f;
+    public float differentUpPosition = .39f;
 
     private int customVerticalAxis = 0;
     private int customHorizontalAxis = 0;
@@ -37,6 +38,11 @@ public class SuspensionBikeController : MonoBehaviour
     //accelleration parameters
     private float accelleration;
     private float lastVelocity = 0;
+
+    public float GetCustomHorizontal()
+    {
+        return customHorizontalAxis;
+    }
 
     public float GetAccellerationForce()
     {
@@ -105,7 +111,7 @@ public class SuspensionBikeController : MonoBehaviour
         backWheelTransform.position = backWheelRb.transform.position;
         backWheelTransform.rotation = backWheelRb.transform.rotation;
 
-        bodyTransform.position = bodyRb.transform.position + (Vector3.up * - 0.283f);
+        bodyTransform.position = bodyRb.transform.position + (Vector3.up * - differentUpPosition);
         bodyTransform.rotation = bodyRb.transform.rotation;    
 
         //raycast ground check
@@ -148,7 +154,7 @@ public class SuspensionBikeController : MonoBehaviour
             if (isGrounded)
             {
                 bodyRb.AddForceAtPosition(bodyRb.transform.forward * accellerationForce * customVerticalAxis, 
-                    bodyRb.transform.position + (bodyRb.transform.up * applicationDeltaPoint));
+                    bodyRb.transform.position + (bodyRb.transform.up * -applicationDeltaPoint));
                 torque = bodyRb.transform.up * turnVelocity * customHorizontalAxis;
             }
             else

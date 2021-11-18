@@ -6,7 +6,7 @@ public class TrafficCarController : MonoBehaviour
 {
     public float movementSpeed = 7f;
     public float rotationSpeed = 75f;
-    public float stopDistance = 5f;
+    public float stopDistance = 3f;
     public bool reachedDestination;
     public bool touched = false;
     public LayerMask carLayer;
@@ -15,28 +15,53 @@ public class TrafficCarController : MonoBehaviour
     private Vector3 velocity;
     public Vector3 destination;
     private Vector3 lastPosition;
+    public bool move = true;
 
     private void OnCollisionEnter(Collision collision)
     {
         if (!collision.transform.CompareTag("Ground") && !collision.transform.CompareTag("Objects"))
         {
             touched = true;
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        RaycastHit hit;
-        bool raycastHit = Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 10f, carLayer | playerLayer);
-        if (raycastHit)
+        RaycastHit hitFwd, hitLeft, hitRight;
+        bool raycastHitFwd = Physics.Raycast(transform.position + Vector3.up, transform.TransformDirection(Vector3.forward), out hitFwd, 10f, carLayer | playerLayer);
+        //bool raycastHitLeft = Physics.Raycast(transform.position + Vector3.up, transform.TransformDirection((Vector3.forward - Vector3.right).normalized), out hitLeft, 10f, carLayer | playerLayer);
+        bool raycastHitRight = Physics.Raycast(transform.position + Vector3.up, transform.TransformDirection((Vector3.forward + Vector3.right).normalized), out hitRight, 10f, carLayer | playerLayer);
+
+        if (raycastHitFwd)
         {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+            Debug.DrawRay(transform.position + Vector3.up, transform.TransformDirection(Vector3.forward) * hitFwd.distance, Color.yellow);
         }
         else
         {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 10f, Color.white);
+            Debug.DrawRay(transform.position + Vector3.up, transform.TransformDirection(Vector3.forward) * 10f, Color.white);
         }
+
+        /*if (raycastHitLeft)
+        {
+            Debug.DrawRay(transform.position + Vector3.up, transform.TransformDirection((Vector3.forward - Vector3.right).normalized) * hitLeft.distance, Color.yellow);
+        }
+        else
+        {
+            Debug.DrawRay(transform.position + Vector3.up, transform.TransformDirection((Vector3.forward - Vector3.right).normalized) * 10f, Color.white);
+        }*/
+
+        if (raycastHitRight)
+        {
+            Debug.DrawRay(transform.position + Vector3.up, transform.TransformDirection((Vector3.forward + Vector3.right).normalized) * hitRight.distance, Color.yellow);
+        }
+        else
+        {
+            Debug.DrawRay(transform.position + Vector3.up, transform.TransformDirection((Vector3.forward + Vector3.right).normalized) * 10f, Color.white);
+        }
+
+        bool raycastHit = raycastHitFwd || raycastHitRight;
 
         if (!raycastHit &&
             transform.position != destination &&
