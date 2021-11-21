@@ -17,6 +17,7 @@ public class SuspensionBikeController : MonoBehaviour
     public Transform bodyTransform;
     public Transform frontWheelTransform;
     public Transform backWheelTransform;
+    //public Transform rig;
 
     [Header("Parameters")]
     public float accellerationForce = 1500f;
@@ -28,6 +29,9 @@ public class SuspensionBikeController : MonoBehaviour
     public LayerMask groundLayer;
     public float applicationDeltaPoint = .7f;
     public float differentUpPosition = .39f;
+    /*public float differentRigUpPosition = .66f;
+    public float differentRigFwdPosition = .23f;
+    public float differentRigRightPosition = -.12f;*/
 
     private int customVerticalAxis = 0;
     private int customHorizontalAxis = 0;
@@ -112,7 +116,12 @@ public class SuspensionBikeController : MonoBehaviour
         backWheelTransform.rotation = backWheelRb.transform.rotation;
 
         bodyTransform.position = bodyRb.transform.position + (Vector3.up * - differentUpPosition);
-        bodyTransform.rotation = bodyRb.transform.rotation;    
+        bodyTransform.rotation = bodyRb.transform.rotation;
+
+        /*rig.position = bodyRb.transform.position + (Vector3.up * -differentRigUpPosition) +
+            (Vector3.forward * -differentRigFwdPosition) +
+            (Vector3.right * -differentRigRightPosition);
+        rig.rotation = bodyRb.transform.rotation * Quaternion.Euler(Vector3.right * -90f);*/
 
         //raycast ground check
         RaycastHit hit;

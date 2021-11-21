@@ -115,6 +115,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   destroyedVersion: {fileID: 2338071701721080035, guid: 3f3c2c7da48b6ec4b880221d96c808c7,
     type: 3}
+  distructEffect: {fileID: 6183805045480121494, guid: a5286e00676eca048865d6fcd00282e8,
+    type: 3}
+  ParticlesAtPosition: 1
+  ParticlesAtContactPoint: 0
+  destroyTag:
+  - Player
+  - Car
 --- !u!65 &5546659237227996324
 BoxCollider:
   m_ObjectHideFlags: 0
