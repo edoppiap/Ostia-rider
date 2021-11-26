@@ -15,26 +15,43 @@ public class GameManager : MonoBehaviour
     public CinemachineVirtualCamera optionsCamera;
 
     [Header("Canvas")]
+    public GameObject startCanvas;
     public GameObject gameCanvas;
     public GameObject pauseCanvas;
+    public GameObject optionsCanvas;
     public GameObject gameOverCanvas;
     public GameObject deliveryTimeCanvas;
 
     [Header("Text component")]
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI totalText;
-    public TextMeshProUGUI addedTimeText;
+    public GameObject bonusPrefab;
     public TextMeshProUGUI deliveryTimeText;
     public TextMeshProUGUI messageText;
+    public TextMeshProUGUI globalMoneyText;
+    public TextMeshProUGUI localMoneyText;
+    public TextMeshProUGUI recordText;
+    public TextMeshProUGUI tapToStartText;
 
     [Header("Time parameters")]
     public float timeAddedFor100Metres = 6f;
     public float gameTime = 61f;
     public int timeForDeliveryFor100Metres = 20;
     private float timeRemaining;
+    public int feeForDeliveryFor100Metres = 2;
 
-    [Header("Components to hide")]
-    public GameObject[] objectsToHide;
+    [Header("Bonus parameters")]
+    public string speedyText = "SPEEDY!";
+    public string normalText = "NORMAL";
+    public string badText = "BAD!";
+    public string missedText = "MISSED!";
+    public float speedyTimeBonus = 5f;
+    public float normalTimeBonus = 2f;
+    public int speedyTip = 5;
+    public int normalTip = 3;
+    public string bonusTimeString = "Bonus time:";
+    public string feeMoneyString = "Fee:";
+    public string tipMoneyString = "Tip:";
 
     [Header("Parents")]
     public GameObject restaurantsParent;
@@ -47,6 +64,7 @@ public class GameManager : MonoBehaviour
     [Range(0f, 1f)]
     public float minNormalBonus = .3f;
 
+    private Player player;
     private List<GameObject> restaurants = new List<GameObject>();
     private List<GameObject> clients = new List<GameObject>();
     private GameObject tempRestaurant;
@@ -56,7 +74,7 @@ public class GameManager : MonoBehaviour
     private int countDelivery = 0;
     private float deliveryTimeRemaining = 100f;
     private float deliveryTime;
-    private float startDeliveryTime;
+    private int localMoney = 0;
 
     public float GetTimeRemaining()
     {
@@ -69,12 +87,59 @@ public class GameManager : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    public void SavePlayer()
+    {
+        SaveSystem.SavePlayer(player);
+    }
+
+    public void LoadPlayer()
+    {
+        PlayerData data = SaveSystem.LoadPlayer();
+
+        if(data != null)
+        {
+            player.globalMoney = data.globalMoney;
+            player.record = data.record;
+        }
+        else
+        {
+            player.globalMoney = 0;
+            player.record = 0;
+        }
+    }
+
+    IEnumerator DoubleBonusPrefab(int fee, int tip)
+    {
+        GameObject feePrefab = Instantiate(bonusPrefab, localMoneyText.transform.position - Vector3.up * 150f, timerText.transform.parent.rotation, gameCanvas.transform);
+        feePrefab.GetComponent<MoveIUElement>().SetDestination(localMoneyText.transform.position);
+        feePrefab.GetComponent<AssignBonusText>().SetBonusText(feeMoneyString + " ", Mathf.FloorToInt(fee).ToString());
+
+        yield return new WaitForSeconds(2f);
+
+        if (tip != 0)
+        {
+            GameObject tipPrefab = Instantiate(bonusPrefab, localMoneyText.transform.position - Vector3.up * 150f, timerText.transform.parent.rotation, gameCanvas.transform);
+            tipPrefab.GetComponent<MoveIUElement>().SetDestination(localMoneyText.transform.position);
+            tipPrefab.GetComponent<AssignBonusText>().SetBonusText(tipMoneyString + " ", Mathf.FloorToInt(tip).ToString());
+        }
+        yield return null;
+    }
+
+    public void AddMoney(int fee, int tip)
+    {
+        StartCoroutine(DoubleBonusPrefab(fee, tip));
+        localMoney += fee + tip;
+    }
+
     public void AddTime(float addingTime)
     {
-        addedTimeText.gameObject.SetActive(true);
-        addedTimeText.SetText("+" + Mathf.FloorToInt(addingTime).ToString());
+        GameObject temp = Instantiate(bonusPrefab, timerText.transform.parent.position - Vector3.up*150f, timerText.transform.parent.rotation, gameCanvas.transform);
+        temp.GetComponent<MoveIUElement>().SetDestination(timerText.transform.parent.position);
+        temp.GetComponent<AssignBonusText>().SetBonusText(bonusTimeString + " ", Mathf.FloorToInt(addingTime).ToString());
+        //addedTimeText.gameObject.SetActive(true);
+        //addedTimeText.SetText("+" + Mathf.FloorToInt(addingTime).ToString());
         timeRemaining += addingTime;
-        StartCoroutine(FadeOut(addedTimeText.gameObject, 4f));
+        //StartCoroutine(FadeOut(addedTimeText.gameObject, 4f));
     }
 
     public bool IsInPlay()
@@ -104,20 +169,29 @@ public class GameManager : MonoBehaviour
         gameHasEnded = true;
         gameOverCanvas.SetActive(true);
         gameCanvas.SetActive(false);
-        totalText.SetText("Total delivery: " + countDelivery.ToString());
+        totalText.SetText("Earned money: " + localMoney.ToString() + "\nTotal delivery: " + countDelivery.ToString());
+        //totalText.SetText("Total delivery: " + countDelivery.ToString() + "\nEarned money: "+ localMoney.ToString());
+        player.globalMoney += localMoney;
+        if (localMoney > player.record)
+            player.record = localMoney;
+
+        SavePlayer();
     }
 
     public void OpenOptions()
     {
-        Debug.Log("Hai cliccato anche opzioni");
         optionsCamera.Priority = 1;
         menuCamera.Priority = 0;
+        optionsCanvas.SetActive(true);
+        startCanvas.SetActive(false);
     }
 
     public void CloseOptions()
     {
         optionsCamera.Priority = 0;
         menuCamera.Priority = 1;
+        optionsCanvas.SetActive(false);
+        startCanvas.SetActive(true);
     }
 
     private void DeAssignClient()
@@ -165,17 +239,20 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        addedTimeText.gameObject.SetActive(false);
+        //addedTimeText.gameObject.SetActive(false);
         inPlay = true;
         gameHasEnded = false;
         mainCamera.Priority = 1;
         menuCamera.Priority = 0;
 
         gameCanvas.SetActive(true);
+        startCanvas.SetActive(false);
 
-        foreach(var icon in objectsToHide){
-            icon.SetActive(false);
-        }
+        //localMoneyText.transform.parent.gameObject.SetActive(false);
+        recordText.gameObject.SetActive(false);
+
+        localMoney = 0;
+
     }
 
     private void AssignTarget(Transform target)
@@ -223,7 +300,6 @@ public class GameManager : MonoBehaviour
         AddTime(timeAddedFor100Metres*(clienteAssegnato.GetDistanceFromClient())/100);
         CalculateDeliveryTime(clienteAssegnato.GetDistanceFromClient());
         AssignTarget(clienteAssegnato.GetCliente().transform);
-        startDeliveryTime = Time.time;
         deliveryTimeCanvas.gameObject.SetActive(true);
     }
 
@@ -244,23 +320,27 @@ public class GameManager : MonoBehaviour
 
     public void EndDelivery(GameObject client, bool done)
     {
+        int money = Mathf.FloorToInt(feeForDeliveryFor100Metres*(tempRestaurant.GetComponent<ClienteAssegnato>().GetDistanceFromClient())/100);
         deliveryTimeCanvas.gameObject.SetActive(false);
         if (deliveryTimeRemaining > deliveryTime * minSpeedyBonus)
         {
-            AddTime(5f);
-            SetColorAndTextAndThenFadeOut(messageText, Color.green, "SPEEDY!");
+            AddTime(speedyTimeBonus);
+            AddMoney(money, speedyTip);
+            SetColorAndTextAndThenFadeOut(messageText, Color.green, speedyText);
         }
         else if (deliveryTimeRemaining > deliveryTime * minNormalBonus)
         {
-            AddTime(2f);
-            SetColorAndTextAndThenFadeOut(messageText, Color.yellow, "NORMAL");
+            AddTime(normalTimeBonus);
+            AddMoney(money, normalTip);
+            SetColorAndTextAndThenFadeOut(messageText, Color.yellow, normalText);
         }
         else if (done)
         {
-            SetColorAndTextAndThenFadeOut(messageText, Color.red, "SLOW!");
+            AddMoney(money, 0);
+            SetColorAndTextAndThenFadeOut(messageText, Color.red, badText);
         }else
         {
-            SetColorAndTextAndThenFadeOut(messageText, Color.red, "MISSED!");
+            SetColorAndTextAndThenFadeOut(messageText, Color.red, missedText);
         }
 
         client.SetActive(false);
@@ -270,6 +350,11 @@ public class GameManager : MonoBehaviour
         DeAssignClient();
         AssignClient();
         ReactivateAll(restaurants);
+
+        if (localMoney > player.record)
+            recordText.gameObject.SetActive(true);
+        if (localMoney > 0)
+            localMoneyText.transform.parent.gameObject.SetActive(true);
 
         DeAssignTarget();
     }
@@ -323,6 +408,10 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
+        player = GameObject.Find("Motorino").GetComponent<Player>();
+
+        LoadPlayer();
+
         timeRemaining = gameTime;
         PopulateList(restaurantsParent.GetComponentsInChildren<Transform>(), restaurants);
         PopulateList(clientsParent.GetComponentsInChildren<Transform>(), clients);
@@ -343,11 +432,15 @@ public class GameManager : MonoBehaviour
             pauseCanvas.SetActive(false);
             gameCanvas.SetActive(false);
             gameOverCanvas.SetActive(false);
+            optionsCanvas.SetActive(false);
+            startCanvas.SetActive(true);
         }
         else
         {
             gameOverCanvas.SetActive(false);
             pauseCanvas.SetActive(false);
+            optionsCanvas.SetActive(false);
+            startCanvas.SetActive(false);
             StartGame();
         }
     }
@@ -360,5 +453,10 @@ public class GameManager : MonoBehaviour
             zeroFrictionMaterial.dynamicFriction = 1f;
         else
             zeroFrictionMaterial.dynamicFriction = 0f;
+
+        if(localMoneyText.gameObject.activeSelf)
+            localMoneyText.SetText(localMoney.ToString());
+        if(globalMoneyText.gameObject.activeSelf)
+            globalMoneyText.SetText(player.globalMoney.ToString());
     }
 }

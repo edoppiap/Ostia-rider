@@ -1,31 +1,44 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using UnityEngine.UI;
 
 public class FadeOutUIElement : MonoBehaviour
 { 
-    public float fadeTime = 2f;
+    public float fadeTime = .05f;
 
-    private Button button;
     private Color alphaZero;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        button = this.GetComponent<Button>();
-        alphaZero = new Color(1, 1, 1, 0);
         StartCoroutine(FadeOut());
     }
 
     IEnumerator FadeOut()
     {
-        yield return new WaitForSeconds(4);
-        while (button.image.color.a > 0.001f)
+        TextMeshProUGUI[] childsText = new TextMeshProUGUI[transform.childCount];
+        //yield return new WaitForSeconds(4);
+        int i = 0;
+        foreach (Transform child in transform)
         {
-            button.image.color = Color.Lerp(button.image.color, alphaZero, fadeTime * Time.deltaTime);
+            childsText[i] = child.GetComponent<TextMeshProUGUI>();
+            i++;
+        }
+
+        alphaZero = new Color(0,0,0,0);
+        float time = 0;
+        while (childsText[0].faceColor.a > 6f)
+        {
+            time += Time.deltaTime;
+            foreach(TextMeshProUGUI text in childsText)
+            {
+                text.faceColor = Color.Lerp(text.faceColor, alphaZero, fadeTime * time);
+
+            }
             yield return null;
         }
-        Destroy(transform.parent.gameObject);
+        Destroy(gameObject);
     }
 }
