@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2085545419878325970}
   - component: {fileID: 2085545419878325969}
   - component: {fileID: 2085545419878325968}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Lampione_Elegante
   m_TagString: Objects
   m_Icon: {fileID: 0}

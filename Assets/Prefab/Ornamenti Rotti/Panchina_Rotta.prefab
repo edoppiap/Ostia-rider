@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2937919381161407843}
   - component: {fileID: 2302653153904352058}
   - component: {fileID: 2302653153904352059}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Panchina_Rotta.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,7 +123,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2812601243283981120}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Panchina_Rotta
   m_TagString: Objects
   m_Icon: {fileID: 0}
@@ -159,7 +159,7 @@ GameObject:
   - component: {fileID: 7068536446658422563}
   - component: {fileID: 9151760717504441200}
   - component: {fileID: 9151760717504441201}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Panchina_Rotta
   m_TagString: Untagged
   m_Icon: {fileID: 0}

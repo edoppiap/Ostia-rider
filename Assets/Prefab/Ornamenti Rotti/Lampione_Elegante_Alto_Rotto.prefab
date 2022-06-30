@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6923277578706563266}
   - component: {fileID: 2006498734731732290}
   - component: {fileID: 4269260928726102147}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Lampione_Elegante_Alto_Rotto.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161,7 +161,7 @@ GameObject:
   - component: {fileID: 2544142031074727606}
   - component: {fileID: 3259043058790711098}
   - component: {fileID: 8095929261370017277}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Lampione_Elegante_Alto_Rotto
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -280,7 +280,7 @@ GameObject:
   - component: {fileID: 2512040888398505624}
   - component: {fileID: 4833195716072771536}
   - component: {fileID: 9174805832469801372}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Lampione_Elegante_Alto_Rotto.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -428,7 +428,7 @@ GameObject:
   - component: {fileID: 1019576962139070522}
   - component: {fileID: 8377734837828271929}
   - component: {fileID: 5722069123151073034}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Lampione_Elegante_Alto_Rotto.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -570,7 +570,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5761079030417859746}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Lampione_Elegante_Alto_Rotto
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -607,7 +607,7 @@ GameObject:
   - component: {fileID: 4592695196727804033}
   - component: {fileID: 2549217803269403899}
   - component: {fileID: 7069927252114426694}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Lampione_Elegante_Alto_Rotto.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}

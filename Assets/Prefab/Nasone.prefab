@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8915571239167679418}
   - component: {fileID: 5546659237227996324}
   - component: {fileID: 4720994747622306032}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Nasone
   m_TagString: Objects
   m_Icon: {fileID: 0}

@@ -2055,6 +2055,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
         type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
+        type: 3}
       propertyPath: m_TagString
       value: Objects
       objectReference: {fileID: 0}
@@ -2196,6 +2201,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Panchina (17)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd97d9f083af2d488a4c4249c8b0fb6, type: 3}
@@ -5590,6 +5600,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Panchina (21)
       objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd97d9f083af2d488a4c4249c8b0fb6, type: 3}
 --- !u!4 &293617825 stripped
@@ -6272,6 +6287,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Panchina (15)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd97d9f083af2d488a4c4249c8b0fb6, type: 3}
@@ -7084,6 +7104,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
         type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
+        type: 3}
       propertyPath: m_TagString
       value: Objects
       objectReference: {fileID: 0}
@@ -7540,6 +7565,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Panchina (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
         type: 3}
@@ -8256,7 +8286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_CollideAgainst:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 12279
   m_IgnoreTag: Places
   m_TransparentLayers:
     serializedVersion: 2
@@ -9411,6 +9441,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Panchina (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd97d9f083af2d488a4c4249c8b0fb6, type: 3}
 --- !u!4 &483337390 stripped
@@ -10046,6 +10081,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Nasone (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 572604117714705739, guid: 14317e127e9fbc14d8915f32ef741b13,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 572604117714705739, guid: 14317e127e9fbc14d8915f32ef741b13,
         type: 3}
@@ -13262,6 +13302,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
         type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
+        type: 3}
       propertyPath: m_TagString
       value: Objects
       objectReference: {fileID: 0}
@@ -14322,6 +14367,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Panchina (16)
       objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd97d9f083af2d488a4c4249c8b0fb6, type: 3}
 --- !u!4 &724812825 stripped
@@ -14801,6 +14851,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
         type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
       propertyPath: m_TagString
       value: Objects
       objectReference: {fileID: 0}
@@ -15197,6 +15252,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Panchina (18)
       objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd97d9f083af2d488a4c4249c8b0fb6, type: 3}
 --- !u!4 &768955287 stripped
@@ -15321,6 +15381,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lampione_Elegante (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
         type: 3}
@@ -16258,6 +16323,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Panchina (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd97d9f083af2d488a4c4249c8b0fb6, type: 3}
 --- !u!4 &822492903 stripped
@@ -16824,6 +16894,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
         type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
+        type: 3}
       propertyPath: m_TagString
       value: Objects
       objectReference: {fileID: 0}
@@ -16895,6 +16970,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Nasone
+      objectReference: {fileID: 0}
+    - target: {fileID: 572604117714705739, guid: 14317e127e9fbc14d8915f32ef741b13,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 572604117714705739, guid: 14317e127e9fbc14d8915f32ef741b13,
         type: 3}
@@ -17882,6 +17962,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lampione_Elegante (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
         type: 3}
@@ -19786,6 +19871,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
         type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
+        type: 3}
       propertyPath: m_TagString
       value: Objects
       objectReference: {fileID: 0}
@@ -20719,6 +20809,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Panchina (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd97d9f083af2d488a4c4249c8b0fb6, type: 3}
@@ -22580,6 +22675,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
         type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
+        type: 3}
       propertyPath: m_TagString
       value: Objects
       objectReference: {fileID: 0}
@@ -23466,6 +23566,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Panchina (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
         type: 3}
@@ -24848,6 +24953,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Panchina
+      objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd97d9f083af2d488a4c4249c8b0fb6, type: 3}
@@ -26786,6 +26896,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
         type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
       propertyPath: m_TagString
       value: Objects
       objectReference: {fileID: 0}
@@ -27856,6 +27971,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
         type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
+        type: 3}
       propertyPath: m_TagString
       value: Objects
       objectReference: {fileID: 0}
@@ -28051,6 +28171,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Panchina (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd97d9f083af2d488a4c4249c8b0fb6, type: 3}
 --- !u!4 &1465842212 stripped
@@ -28214,6 +28339,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Panchina (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd97d9f083af2d488a4c4249c8b0fb6, type: 3}
@@ -28678,6 +28808,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Panchina (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd97d9f083af2d488a4c4249c8b0fb6, type: 3}
 --- !u!4 &1489203595 stripped
@@ -28695,7 +28830,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1489986747}
-  m_Layer: 9
+  m_Layer: 14
   m_Name: DestructibleObjects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28991,6 +29126,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Panchina (13)
       objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd97d9f083af2d488a4c4249c8b0fb6, type: 3}
 --- !u!4 &1491644404 stripped
@@ -29080,6 +29220,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Panchina (19)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd97d9f083af2d488a4c4249c8b0fb6, type: 3}
@@ -29336,6 +29481,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Panchina (20)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd97d9f083af2d488a4c4249c8b0fb6, type: 3}
@@ -31076,6 +31226,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Panchina (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd97d9f083af2d488a4c4249c8b0fb6, type: 3}
 --- !u!4 &1571254671 stripped
@@ -32385,6 +32540,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Panchina (14)
       objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd97d9f083af2d488a4c4249c8b0fb6, type: 3}
 --- !u!4 &1631942739 stripped
@@ -33223,6 +33383,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lampione_Elegante (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
         type: 3}
@@ -35126,6 +35291,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
         type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
+        type: 3}
       propertyPath: m_TagString
       value: Objects
       objectReference: {fileID: 0}
@@ -36033,6 +36203,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: f3f7eecc29acae941b24b3315d70dd41, type: 2}
+    - target: {fileID: -8171117524307203289, guid: 735ddc048766fee4297e3d174dcd6529,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f3f7eecc29acae941b24b3315d70dd41, type: 2}
     - target: {fileID: -8143710011712545758, guid: 735ddc048766fee4297e3d174dcd6529,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -36469,6 +36644,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: f3f7eecc29acae941b24b3315d70dd41, type: 2}
     - target: {fileID: -4683669308469848369, guid: 735ddc048766fee4297e3d174dcd6529,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f3f7eecc29acae941b24b3315d70dd41, type: 2}
+    - target: {fileID: -4680132301425595955, guid: 735ddc048766fee4297e3d174dcd6529,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -37283,6 +37463,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: f3f7eecc29acae941b24b3315d70dd41, type: 2}
+    - target: {fileID: 7137442478868344379, guid: 735ddc048766fee4297e3d174dcd6529,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: f3f7eecc29acae941b24b3315d70dd41, type: 2}
     - target: {fileID: 7139435047476080653, guid: 735ddc048766fee4297e3d174dcd6529,
         type: 3}
       propertyPath: m_Layer
@@ -37627,7 +37812,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1887444485 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 1292043252959764498, guid: 735ddc048766fee4297e3d174dcd6529,
+  m_CorrespondingSourceObject: {fileID: -7695643273876906495, guid: 735ddc048766fee4297e3d174dcd6529,
     type: 3}
   m_PrefabInstance: {fileID: 1887444464}
   m_PrefabAsset: {fileID: 0}
@@ -37799,8 +37984,8 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 8937665938935388488, guid: 735ddc048766fee4297e3d174dcd6529, type: 3}
---- !u!64 &1887444502
-MeshCollider:
+--- !u!65 &1887444502
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -37809,10 +37994,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 2726277716269829465, guid: 735ddc048766fee4297e3d174dcd6529, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 60.9148, y: 15.56576, z: 121.11172}
+  m_Center: {x: -29.10764, y: 6.782878, z: 59.20608}
 --- !u!64 &1887444503
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -39340,6 +39524,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Panchina (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd97d9f083af2d488a4c4249c8b0fb6, type: 3}
 --- !u!4 &1980686934 stripped
@@ -39677,6 +39866,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Panchina (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3041922404698180461, guid: 2cd97d9f083af2d488a4c4249c8b0fb6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd97d9f083af2d488a4c4249c8b0fb6, type: 3}
@@ -41330,6 +41524,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
         type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
+        type: 3}
       propertyPath: m_TagString
       value: Objects
       objectReference: {fileID: 0}
@@ -42724,6 +42923,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
         type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2085545419878325983, guid: b6eef22bc00523044ae20c9ffa34bccc,
+        type: 3}
       propertyPath: m_TagString
       value: Objects
       objectReference: {fileID: 0}
@@ -43209,6 +43413,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lampione_Elegante_Alto
+      objectReference: {fileID: 0}
+    - target: {fileID: 4548832121596860055, guid: 18e652d651581f4498aea2b233cbf218,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 18e652d651581f4498aea2b233cbf218, type: 3}

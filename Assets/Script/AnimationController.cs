@@ -29,43 +29,6 @@ public class AnimationController : MonoBehaviour
         return new Vector3(Mathf.Abs(v.x), Mathf.Abs(v.y), Mathf.Abs(v.z));
     }
 
-    /*public void SterzaDx()
-    {
-        sterzando = 1;
-        if (accellerando)
-        {
-            sterzando = true;
-            anim.SetBool("sterzaDx", true);
-        }
-    }
-
-    public void Accellera()
-    {
-        accellerando = true;
-    }
-
-    public void Decellera()
-    {
-        accellerando = false;
-    }
-
-    public void DeSterza()
-    {
-        sterzando = false;
-        anim.SetBool("sterzaDx", false);
-        anim.SetBool("sterzaSx", false);
-    }
-
-    public void SterzaSx()
-    {
-        if (accellerando)
-        {
-            anim.SetBool("sterzaSx", true);
-            sterzando = true;
-        }
-        //sterzando = -1;
-    }*/
-
     // Start is called before the first frame update
     void Start()
     {
@@ -121,13 +84,6 @@ public class AnimationController : MonoBehaviour
             bikeAnimator.SetBool("goingLeft", false);
         }
 
-        //characterAnimator.SetBool("isNotGrounded", !suspensionBikeController.IsGrounded());
         coperchioAnimator.SetBool("isNotGrounded", backWheelRb.velocity.y < -5);
-
-        //wheel direction
-        //frontWheelTransform.localEulerAngles = Vector3.up * suspensionBikeController.GetCustomHorizontal() * rotateAngle;
-        //manubrio.localEulerAngles = new Vector3(-suspensionBikeController.GetCustomHorizontal() * 5f, suspensionBikeController.GetCustomHorizontal() * rotateAngle/2, 0f);
-        //parafanghi.localEulerAngles =  Vector3.up* suspensionBikeController.GetCustomHorizontal() * rotateAngle;
-        //frontWheel.Rotate(frontWheel.up, suspensionBikeController.GetCustomHorizontal()*20f);
     }
 }
