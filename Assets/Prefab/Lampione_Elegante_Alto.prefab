@@ -125,9 +125,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 604e158a00f38d84fbed03abdbd507ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyedVersion: {fileID: 1305646976061885031, guid: 3f776f1f60910904d8b9284fa0daab6a,
+  destroyedVersion: {fileID: 4951890817400864280, guid: 9d991340955bb514abe675a5485a7848,
     type: 3}
-  distructEffect: {fileID: 0}
+  distructEffect: {fileID: 9127839792274782796, guid: c93322db2e6581f48acfb81ae0e1d2d6,
+    type: 3}
   ParticlesAtPosition: 1
   ParticlesAtContactPoint: 0
   destroyTag:

@@ -535,6 +535,9 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
+  boundariesLayer:
+    serializedVersion: 2
+    m_Bits: 32768
   destination: {x: 0, y: 0, z: 0}
   move: 1
 --- !u!114 &2768592873828522980
