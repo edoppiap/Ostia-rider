@@ -26,9 +26,14 @@ public class Destructible : MonoBehaviour
         if (CompareTags(collision.gameObject.tag) && !isAlreadySpawned)
         {
             isAlreadySpawned = true;
-            if(destroyedVersion !=null)
-                Instantiate(destroyedVersion, transform.position, transform.rotation, transform.parent);
+            if(destroyedVersion != null)
+            {
+                GameObject instantiated = Instantiate(destroyedVersion, transform.position, transform.rotation, transform.parent);
+                if(instantiated.TryGetComponent(out Renderer renderer))
+                    renderer.material = gameObject.GetComponent<Renderer>().material;
+            }
             Destroy(gameObject);
+
             if (distructEffect != null)
             {
                 if(ParticlesAtPosition)
