@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 948568989481037302}
   - component: {fileID: 2019287454211869740}
   - component: {fileID: 3301662972302537825}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Lampione_Pedonale
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,3 +118,4 @@ MonoBehaviour:
   destroyTag:
   - Player
   - Car
+  - Ornamenti

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4680645906265028708}
   - component: {fileID: 6284046531816498430}
   - component: {fileID: 6284046531816498402}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Attraversamento
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -116,3 +116,4 @@ MonoBehaviour:
   destroyTag:
   - Player
   - Car
+  - Ornamenti
