@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public CinemachineVirtualCamera mainCamera;
     public CinemachineVirtualCamera menuCamera;
     public CinemachineVirtualCamera optionsCamera;
+    public CinemachineVirtualCamera leaderboardCamera;
 
     [Header("Canvas")]
     public GameObject startCanvas;
@@ -21,6 +22,7 @@ public class GameManager : MonoBehaviour
     public GameObject optionsCanvas;
     public GameObject gameOverCanvas;
     public GameObject deliveryTimeCanvas;
+    public GameObject leaderboardCanvas;
 
     [Header("Text component")]
     public TextMeshProUGUI timerText;
@@ -75,6 +77,7 @@ public class GameManager : MonoBehaviour
     private float deliveryTimeRemaining = 100f;
     private float deliveryTime;
     private int localMoney = 0;
+    private PlayfabManager playfabManager;
 
     public float GetTimeRemaining()
     {
@@ -105,7 +108,7 @@ public class GameManager : MonoBehaviour
         {
             player.globalMoney = 0;
             player.record = 0;
-        }
+        }        
     }
 
     IEnumerator DoubleBonusPrefab(int fee, int tip)
@@ -175,23 +178,54 @@ public class GameManager : MonoBehaviour
         if (localMoney > player.record)
             player.record = localMoney;
 
+        playfabManager.SendLeaderboard(player.record);
         SavePlayer();
+    }
+
+    public void OpenLeaderboard()
+    {
+        leaderboardCamera.Priority = 1;
+        optionsCamera.Priority = 0;
+        leaderboardCanvas.SetActive(true);
+        optionsCanvas.SetActive(false);
+
+        leaderboardCanvas.transform.Find("OptionsButton").gameObject.SetActive(true);
+        leaderboardCanvas.transform.Find("RestartButton").gameObject.SetActive(false);
+        leaderboardCanvas.transform.Find("HomeButton").gameObject.SetActive(false);
+        playfabManager.GetLeaderboard();
+    }
+
+    public void OpenLeaderboardFromGameover()
+    {
+        leaderboardCamera.Priority = 1;
+        mainCamera.Priority = 0;
+        gameOverCanvas.SetActive(false);
+        leaderboardCanvas.SetActive(true);
+
+        leaderboardCanvas.transform.Find("OptionsButton").gameObject.SetActive(false);
+        leaderboardCanvas.transform.Find("RestartButton").gameObject.SetActive(true);
+        leaderboardCanvas.transform.Find("HomeButton").gameObject.SetActive(true);
+        playfabManager.GetLeaderboard();
     }
 
     public void OpenOptions()
     {
+        leaderboardCamera.Priority = 0;
         optionsCamera.Priority = 1;
         menuCamera.Priority = 0;
         optionsCanvas.SetActive(true);
         startCanvas.SetActive(false);
+        leaderboardCanvas.SetActive(false);
     }
 
     public void CloseOptions()
     {
+        leaderboardCamera.Priority = 0;
         optionsCamera.Priority = 0;
         menuCamera.Priority = 1;
         optionsCanvas.SetActive(false);
         startCanvas.SetActive(true);
+        leaderboardCanvas.SetActive(false);
     }
 
     private void DeAssignClient()
@@ -409,6 +443,7 @@ public class GameManager : MonoBehaviour
     public void Start()
     {
         player = GameObject.Find("Motorino").GetComponent<Player>();
+        playfabManager = GetComponent<PlayfabManager>();
 
         LoadPlayer();
 
@@ -424,22 +459,21 @@ public class GameManager : MonoBehaviour
         deliveryTimeCanvas.SetActive(false);
         messageText.gameObject.SetActive(false);
 
+        gameOverCanvas.SetActive(false);
+        pauseCanvas.SetActive(false);
+        optionsCanvas.SetActive(false);
+        leaderboardCanvas.SetActive(false);
+
         if (!reloaded)
         {
             menuCamera.Priority = 1;
             mainCamera.Priority = 0;
 
-            pauseCanvas.SetActive(false);
             gameCanvas.SetActive(false);
-            gameOverCanvas.SetActive(false);
-            optionsCanvas.SetActive(false);
             startCanvas.SetActive(true);
         }
         else
         {
-            gameOverCanvas.SetActive(false);
-            pauseCanvas.SetActive(false);
-            optionsCanvas.SetActive(false);
             startCanvas.SetActive(false);
             StartGame();
         }

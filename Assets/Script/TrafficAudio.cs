@@ -46,7 +46,7 @@ public class TrafficAudio : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision != null)
+        if(crashSource != null)
         {
             if (!crashSource.isPlaying && CompareTags(collision.gameObject.tag))
             {
