@@ -182,30 +182,48 @@ public class GameManager : MonoBehaviour
         SavePlayer();
     }
 
+    IEnumerator WaitThenActive(float time, GameObject canvas)
+    {
+        yield return new WaitForSeconds(time);
+        canvas.SetActive(true);
+    }
+
     public void OpenLeaderboard()
     {
-        leaderboardCamera.Priority = 1;
-        optionsCamera.Priority = 0;
-        leaderboardCanvas.SetActive(true);
-        optionsCanvas.SetActive(false);
-
-        leaderboardCanvas.transform.Find("OptionsButton").gameObject.SetActive(true);
-        leaderboardCanvas.transform.Find("RestartButton").gameObject.SetActive(false);
-        leaderboardCanvas.transform.Find("HomeButton").gameObject.SetActive(false);
         playfabManager.GetLeaderboard();
+
+        leaderboardCamera.Priority = 1;
+        menuCamera.Priority = 0;
+        startCanvas.SetActive(false);
+        StartCoroutine(WaitThenActive(.5f, leaderboardCanvas));
+
+        leaderboardCanvas.transform.Find("RestartButton").gameObject.SetActive(false);
+        leaderboardCanvas.transform.Find("HomeButtonGameOver").gameObject.SetActive(false);
+        leaderboardCanvas.transform.Find("HomeButton").gameObject.SetActive(true);
+
     }
 
     public void OpenLeaderboardFromGameover()
     {
+        playfabManager.GetLeaderboard();
+
         leaderboardCamera.Priority = 1;
         mainCamera.Priority = 0;
         gameOverCanvas.SetActive(false);
         leaderboardCanvas.SetActive(true);
 
-        leaderboardCanvas.transform.Find("OptionsButton").gameObject.SetActive(false);
         leaderboardCanvas.transform.Find("RestartButton").gameObject.SetActive(true);
-        leaderboardCanvas.transform.Find("HomeButton").gameObject.SetActive(true);
-        playfabManager.GetLeaderboard();
+        leaderboardCanvas.transform.Find("HomeButtonGameOver").gameObject.SetActive(true);
+        leaderboardCanvas.transform.Find("HomeButton").gameObject.SetActive(false);
+    }
+
+
+    public void CloseLeaderboard()
+    {
+        leaderboardCamera.Priority = 0;
+        menuCamera.Priority = 1;
+        leaderboardCanvas.SetActive(false);
+        StartCoroutine(WaitThenActive(.5f, startCanvas));
     }
 
     public void OpenOptions()
