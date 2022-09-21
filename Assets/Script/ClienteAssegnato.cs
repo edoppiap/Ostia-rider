@@ -43,15 +43,19 @@ public class ClienteAssegnato : MonoBehaviour
         {
             Material material = renderer.material;
 
-            if(dist < minDistance)
-                material.SetColor("_Color", Color.red);
+            if (dist < minDistance)
+                material.color = Color.red;
+                //material.SetColor("_Color", Color.red);
             else if(dist >= minDistance && dist <= maxDistance)
-                material.SetColor("_Color", Color.yellow);
+                material.color = Color.yellow;
+                //material.SetColor("_Color", Color.yellow);
             else if(dist > maxDistance)
-                material.SetColor("_Color", Color.green);
+                material.color = Color.green;
+            material.SetColor("_Color", Color.green);
 
-            if (renderer.gameObject.name == "ParkingArea") { 
-                material.SetColor("_Color", new Color(material.color.r, material.color.g, material.color.b, .5f));
+            if (renderer.gameObject.name == "ParkingArea") {
+                material.color = new Color(material.color.r, material.color.g, material.color.b, .5f);
+                //material.SetColor("_Color", new Color(material.color.r, material.color.g, material.color.b, .5f));
             }
         }
         

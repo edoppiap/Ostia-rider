@@ -188,6 +188,11 @@ public class GameManager : MonoBehaviour
         canvas.SetActive(true);
     }
 
+    public bool isGameEnded()
+    {
+        return gameHasEnded;
+    }
+
     public void OpenLeaderboard()
     {
         playfabManager.GetLeaderboard();
