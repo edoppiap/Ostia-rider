@@ -78,6 +78,7 @@ public class GameManager : MonoBehaviour
     private float deliveryTime;
     private int localMoney = 0;
     private PlayfabManager playfabManager;
+    private SuspensionBikeController controller;
 
     public float GetTimeRemaining()
     {
@@ -179,6 +180,7 @@ public class GameManager : MonoBehaviour
             player.record = localMoney;
 
         playfabManager.SendLeaderboard(player.record);
+        controller.Deaccellera();
         SavePlayer();
     }
 
@@ -465,7 +467,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
-        player = GameObject.Find("Motorino").GetComponent<Player>();
+        GameObject motorino = GameObject.Find("Motorino");
+        player = motorino.GetComponent<Player>();
+        controller = motorino.GetComponent<SuspensionBikeController>();
         playfabManager = GetComponent<PlayfabManager>();
 
         LoadPlayer();
