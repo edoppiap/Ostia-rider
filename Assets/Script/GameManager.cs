@@ -96,20 +96,33 @@ public class GameManager : MonoBehaviour
         SaveSystem.SavePlayer(player);
     }
 
+    public Player getPlayer()
+    {
+        return player;
+    }
+
     public void LoadPlayer()
     {
         PlayerData data = SaveSystem.LoadPlayer();
 
         if(data != null)
         {
+            player.id = data.id;
             player.globalMoney = data.globalMoney;
             player.record = data.record;
         }
         else
         {
+            player.id = System.Guid.NewGuid().ToString();
             player.globalMoney = 0;
             player.record = 0;
-        }        
+        }
+
+        if (player.id == null)
+            player.id = System.Guid.NewGuid().ToString();
+
+        playfabManager.Login(player.id);
+        SavePlayer();
     }
 
     IEnumerator DoubleBonusPrefab(int fee, int tip)

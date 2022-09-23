@@ -7,34 +7,94 @@ using PlayFab.ClientModels;
 
 public class PlayfabManager : MonoBehaviour
 {
+    [Header("Windows")]
+    public GameObject nameWindow;
+    public GameObject[] reactiveAfterUsername;
+
+    [Header("Display name window")]
+    public GameObject nameError;
+    public TMP_InputField nameInput;
+
+    [Header("Leaderboard")]
     public GameObject rowPrefab;
     public Transform rowsParent;
+
+    private GameManager gameManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        Login();
+        gameManager = GetComponent<GameManager>();
     }
 
-    void Login()
+    public void Login(string customId)
     {
         var request = new LoginWithCustomIDRequest
         {
-            CustomId = SystemInfo.deviceUniqueIdentifier,
-            CreateAccount = true
+            CustomId = customId,
+            CreateAccount = true,
+            InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
+            {
+                GetPlayerProfile = true
+            }
         };
-        PlayFabClientAPI.LoginWithCustomID(request, OnSuccess, OnError);
+        PlayFabClientAPI.LoginWithCustomID(request, OnLoginSuccess, OnError);
     }
 
-    void OnSuccess(LoginResult result)
+    void OnLoginSuccess(LoginResult result)
     {
         Debug.Log("Successfurl login/account create!");
+        string name = null;
+        if(result.InfoResultPayload.PlayerProfile != null)
+            name = result.InfoResultPayload.PlayerProfile.DisplayName;
+
+        if (name == null)
+        {
+            nameWindow.SetActive(true);
+            foreach (GameObject obj in reactiveAfterUsername)
+            {
+                obj.SetActive(false);
+            }
+        }
+        else
+        {
+            nameWindow.SetActive(false);
+            foreach (GameObject obj in reactiveAfterUsername)
+            {
+                obj.SetActive(true);
+            }
+        }
     }
 
     void OnError(PlayFabError error)
     {
+        nameWindow.SetActive(true);
+        nameError.SetActive(true);
+        foreach (GameObject obj in reactiveAfterUsername)
+        {
+            obj.SetActive(false);
+        }
         Debug.Log("Errore durante il login/accesso");
         Debug.Log(error.GenerateErrorReport());
+    }
+
+    public void SubmitNameButton()
+    {
+        var request = new UpdateUserTitleDisplayNameRequest
+        {
+            DisplayName = nameInput.text,
+        };
+        PlayFabClientAPI.UpdateUserTitleDisplayName(request, OnDisplayNameUpdate, OnError);
+    }
+
+    void OnDisplayNameUpdate(UpdateUserTitleDisplayNameResult result)
+    {
+        Debug.Log("Updated display name!");
+        nameWindow.SetActive(false);
+        foreach (GameObject obj in reactiveAfterUsername)
+        {
+            obj.SetActive(true);
+        }
     }
 
     public void SendLeaderboard(int score)
@@ -71,20 +131,22 @@ public class PlayfabManager : MonoBehaviour
 
     void OnLeaderboardGet(GetLeaderboardResult result)
     {
+        Player player = gameManager.getPlayer();
+        int count = result.Leaderboard.Count;
+        int range = count > 4 ? 4 : count;
+
         foreach(Transform item in rowsParent)
         {
             Destroy(item.gameObject);
         }
 
-        foreach(var item in result.Leaderboard)
+        foreach (var item in result.Leaderboard.GetRange(0, range))
         {
             GameObject newGo = Instantiate(rowPrefab, rowsParent);
             TMP_Text[] texts = newGo.GetComponentsInChildren<TMP_Text>();
-            texts[0].text = (item.Position+1).ToString();
-            texts[1].text = item.PlayFabId;
+            texts[0].text = (item.Position + 1).ToString();
+            texts[1].text = item.DisplayName;
             texts[2].text = item.StatValue.ToString();
-
-            //Debug.Log(item.Position + " " + item.PlayFabId + " " + item.StatValue);
         }
     }
 }
