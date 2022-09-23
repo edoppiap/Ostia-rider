@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4625291654641067857}
   - component: {fileID: 5950353384974911940}
   - component: {fileID: 983439806757075603}
+  - component: {fileID: 327740784757179441}
   m_Layer: 14
   m_Name: Fermata
   m_TagString: Untagged
@@ -109,3 +110,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.16150704, y: 0.13525912, z: 2.886956}
   m_Center: {x: 0.0036019078, y: -0.00000023245715, z: 1.4434777}
+--- !u!114 &327740784757179441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6570938984834926212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5af706d675a31634d8aa8c6b762ecd0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clip: {fileID: 8300000, guid: f5c84caa5ddab254a8c988a1429840e4, type: 3}
+  tags:
+  - Player
+  - Car

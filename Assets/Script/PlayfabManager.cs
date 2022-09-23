@@ -14,6 +14,7 @@ public class PlayfabManager : MonoBehaviour
     [Header("Display name window")]
     public GameObject nameError;
     public TMP_InputField nameInput;
+    public GameObject loginText;
 
     [Header("Leaderboard")]
     public GameObject rowPrefab;
@@ -41,6 +42,26 @@ public class PlayfabManager : MonoBehaviour
         PlayFabClientAPI.LoginWithCustomID(request, OnLoginSuccess, OnError);
     }
 
+    public void inLoggin()
+    {
+        loginText.SetActive(false);
+        nameWindow.SetActive(true);
+        foreach (GameObject obj in reactiveAfterUsername)
+        {
+            obj.SetActive(false);
+        }
+    }
+
+    public void loggato()
+    {
+        nameWindow.SetActive(false);
+        loginText.SetActive(false);
+        foreach (GameObject obj in reactiveAfterUsername)
+        {
+            obj.SetActive(true);
+        }
+    }
+
     void OnLoginSuccess(LoginResult result)
     {
         Debug.Log("Successfurl login/account create!");
@@ -50,19 +71,11 @@ public class PlayfabManager : MonoBehaviour
 
         if (name == null)
         {
-            nameWindow.SetActive(true);
-            foreach (GameObject obj in reactiveAfterUsername)
-            {
-                obj.SetActive(false);
-            }
+            inLoggin();
         }
         else
         {
-            nameWindow.SetActive(false);
-            foreach (GameObject obj in reactiveAfterUsername)
-            {
-                obj.SetActive(true);
-            }
+            loggato();
         }
     }
 

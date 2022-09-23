@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1043504199285156924}
   - component: {fileID: 3943580450257809462}
   - component: {fileID: 836525200879548562}
+  - component: {fileID: 3265751623196277581}
   m_Layer: 14
   m_Name: Cancello
   m_TagString: Untagged
@@ -61,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b4f82687cf8e47e43ac4786c87af0444, type: 2}
+  - {fileID: 2100000, guid: f3f7eecc29acae941b24b3315d70dd41, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -117,3 +118,19 @@ MonoBehaviour:
   - Player
   - Car
   - Ornamenti
+--- !u!54 &3265751623196277581
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1548035381778877929}
+  serializedVersion: 2
+  m_Mass: 5
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0

@@ -72,6 +72,7 @@ public class GameManager : MonoBehaviour
     private GameObject tempRestaurant;
     private static bool reloaded = false;
     private static bool inPlay = false;
+    private static bool loggedIn = false;
     private bool gameHasEnded = false;
     private int countDelivery = 0;
     private float deliveryTimeRemaining = 100f;
@@ -121,8 +122,16 @@ public class GameManager : MonoBehaviour
         if (player.id == null)
             player.id = System.Guid.NewGuid().ToString();
 
-        playfabManager.Login(player.id);
-        SavePlayer();
+        if (!loggedIn)
+        {
+            loggedIn = true;
+            playfabManager.Login(player.id);
+            SavePlayer();
+        }
+        else
+        {
+            playfabManager.loggato();
+        }
     }
 
     IEnumerator DoubleBonusPrefab(int fee, int tip)

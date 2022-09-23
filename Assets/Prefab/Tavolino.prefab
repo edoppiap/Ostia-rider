@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4022295789701918486}
   - component: {fileID: 7006139847827858690}
   - component: {fileID: 7934105264894450334}
+  - component: {fileID: 5570468459124988559}
   m_Layer: 0
   m_Name: Tavolino
   m_TagString: Untagged
@@ -117,3 +118,19 @@ MonoBehaviour:
   - Player
   - Car
   - Ornamenti
+--- !u!54 &5570468459124988559
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3229904216182279875}
+  serializedVersion: 2
+  m_Mass: 0.1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
