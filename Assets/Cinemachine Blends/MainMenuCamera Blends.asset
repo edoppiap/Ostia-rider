@@ -16,7 +16,7 @@ MonoBehaviour:
   - m_From: CinemachineMenuCamera
     m_To: CinemachineFollow
     m_Blend:
-      m_Style: 1
+      m_Style: 0
       m_Time: 0.4
       m_CustomCurve:
         serializedVersion: 2
@@ -25,7 +25,7 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 0
   - m_From: CinemachineMenuCamera
-    m_To: CinemachineOptionsCamera
+    m_To: CinemachineLeaderboardCamera
     m_Blend:
       m_Style: 1
       m_Time: 0.5
@@ -35,11 +35,22 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 0
-  - m_From: CinemachineOptionsCamera
+  - m_From: CinemachineLeaderboardCamera
     m_To: CinemachineMenuCamera
     m_Blend:
       m_Style: 1
       m_Time: 0.5
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - m_From: CinemachineFollow
+    m_To: CinemachineLeaderboardCamera
+    m_Blend:
+      m_Style: 0
+      m_Time: 2
       m_CustomCurve:
         serializedVersion: 2
         m_Curve: []

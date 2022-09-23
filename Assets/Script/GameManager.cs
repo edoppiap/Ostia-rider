@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public CinemachineVirtualCamera mainCamera;
     public CinemachineVirtualCamera menuCamera;
     public CinemachineVirtualCamera optionsCamera;
+    public CinemachineVirtualCamera leaderboardCamera;
 
     [Header("Canvas")]
     public GameObject startCanvas;
@@ -21,6 +22,7 @@ public class GameManager : MonoBehaviour
     public GameObject optionsCanvas;
     public GameObject gameOverCanvas;
     public GameObject deliveryTimeCanvas;
+    public GameObject leaderboardCanvas;
 
     [Header("Text component")]
     public TextMeshProUGUI timerText;
@@ -70,11 +72,14 @@ public class GameManager : MonoBehaviour
     private GameObject tempRestaurant;
     private static bool reloaded = false;
     private static bool inPlay = false;
+    private static bool loggedIn = false;
     private bool gameHasEnded = false;
     private int countDelivery = 0;
     private float deliveryTimeRemaining = 100f;
     private float deliveryTime;
     private int localMoney = 0;
+    private PlayfabManager playfabManager;
+    private SuspensionBikeController controller;
 
     public float GetTimeRemaining()
     {
@@ -92,19 +97,40 @@ public class GameManager : MonoBehaviour
         SaveSystem.SavePlayer(player);
     }
 
+    public Player getPlayer()
+    {
+        return player;
+    }
+
     public void LoadPlayer()
     {
         PlayerData data = SaveSystem.LoadPlayer();
 
         if(data != null)
         {
+            player.id = data.id;
             player.globalMoney = data.globalMoney;
             player.record = data.record;
         }
         else
         {
+            player.id = System.Guid.NewGuid().ToString();
             player.globalMoney = 0;
             player.record = 0;
+        }
+
+        if (player.id == null)
+            player.id = System.Guid.NewGuid().ToString();
+
+        if (!loggedIn)
+        {
+            loggedIn = true;
+            playfabManager.Login(player.id);
+            SavePlayer();
+        }
+        else
+        {
+            playfabManager.loggato();
         }
     }
 
@@ -175,23 +201,78 @@ public class GameManager : MonoBehaviour
         if (localMoney > player.record)
             player.record = localMoney;
 
+        playfabManager.SendLeaderboard(player.record);
+        controller.Deaccellera();
         SavePlayer();
+    }
+
+    IEnumerator WaitThenActive(float time, GameObject canvas)
+    {
+        yield return new WaitForSeconds(time);
+        canvas.SetActive(true);
+    }
+
+    public bool isGameEnded()
+    {
+        return gameHasEnded;
+    }
+
+    public void OpenLeaderboard()
+    {
+        playfabManager.GetLeaderboard();
+
+        leaderboardCamera.Priority = 1;
+        menuCamera.Priority = 0;
+        startCanvas.SetActive(false);
+        StartCoroutine(WaitThenActive(.5f, leaderboardCanvas));
+
+        leaderboardCanvas.transform.Find("RestartButton").gameObject.SetActive(false);
+        leaderboardCanvas.transform.Find("HomeButtonGameOver").gameObject.SetActive(false);
+        leaderboardCanvas.transform.Find("HomeButton").gameObject.SetActive(true);
+
+    }
+
+    public void OpenLeaderboardFromGameover()
+    {
+        playfabManager.GetLeaderboard();
+
+        leaderboardCamera.Priority = 1;
+        mainCamera.Priority = 0;
+        gameOverCanvas.SetActive(false);
+        leaderboardCanvas.SetActive(true);
+
+        leaderboardCanvas.transform.Find("RestartButton").gameObject.SetActive(true);
+        leaderboardCanvas.transform.Find("HomeButtonGameOver").gameObject.SetActive(true);
+        leaderboardCanvas.transform.Find("HomeButton").gameObject.SetActive(false);
+    }
+
+
+    public void CloseLeaderboard()
+    {
+        leaderboardCamera.Priority = 0;
+        menuCamera.Priority = 1;
+        leaderboardCanvas.SetActive(false);
+        StartCoroutine(WaitThenActive(.5f, startCanvas));
     }
 
     public void OpenOptions()
     {
+        leaderboardCamera.Priority = 0;
         optionsCamera.Priority = 1;
         menuCamera.Priority = 0;
         optionsCanvas.SetActive(true);
         startCanvas.SetActive(false);
+        leaderboardCanvas.SetActive(false);
     }
 
     public void CloseOptions()
     {
+        leaderboardCamera.Priority = 0;
         optionsCamera.Priority = 0;
         menuCamera.Priority = 1;
         optionsCanvas.SetActive(false);
         startCanvas.SetActive(true);
+        leaderboardCanvas.SetActive(false);
     }
 
     private void DeAssignClient()
@@ -408,7 +489,10 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
-        player = GameObject.Find("Motorino").GetComponent<Player>();
+        GameObject motorino = GameObject.Find("Motorino");
+        player = motorino.GetComponent<Player>();
+        controller = motorino.GetComponent<SuspensionBikeController>();
+        playfabManager = GetComponent<PlayfabManager>();
 
         LoadPlayer();
 
@@ -424,22 +508,21 @@ public class GameManager : MonoBehaviour
         deliveryTimeCanvas.SetActive(false);
         messageText.gameObject.SetActive(false);
 
+        gameOverCanvas.SetActive(false);
+        pauseCanvas.SetActive(false);
+        optionsCanvas.SetActive(false);
+        leaderboardCanvas.SetActive(false);
+
         if (!reloaded)
         {
             menuCamera.Priority = 1;
             mainCamera.Priority = 0;
 
-            pauseCanvas.SetActive(false);
             gameCanvas.SetActive(false);
-            gameOverCanvas.SetActive(false);
-            optionsCanvas.SetActive(false);
             startCanvas.SetActive(true);
         }
         else
         {
-            gameOverCanvas.SetActive(false);
-            pauseCanvas.SetActive(false);
-            optionsCanvas.SetActive(false);
             startCanvas.SetActive(false);
             StartGame();
         }

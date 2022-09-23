@@ -30,9 +30,9 @@ public class TrafficCarController : MonoBehaviour
     void Update()
     {
         RaycastHit hitFwd, hitLeft, hitRight;
-        bool raycastHitFwd = Physics.Raycast(transform.position + Vector3.up, transform.TransformDirection(Vector3.forward), out hitFwd, 10f, carLayer | playerLayer);
+        bool raycastHitFwd = Physics.Raycast(transform.position + Vector3.up, transform.TransformDirection(Vector3.forward), out hitFwd, 10f, carLayer | playerLayer, QueryTriggerInteraction.Ignore);
         //bool raycastHitLeft = Physics.Raycast(transform.position + Vector3.up, transform.TransformDirection((Vector3.forward - Vector3.right).normalized), out hitLeft, 10f, carLayer | playerLayer);
-        bool raycastHitRight = Physics.Raycast(transform.position + Vector3.up, transform.TransformDirection((Vector3.forward + Vector3.right).normalized), out hitRight, 10f, carLayer | playerLayer);
+        bool raycastHitRight = Physics.Raycast(transform.position + Vector3.up, transform.TransformDirection((Vector3.forward + Vector3.right).normalized), out hitRight, 10f, carLayer | playerLayer, QueryTriggerInteraction.Ignore);
 
         if (raycastHitFwd)
         {

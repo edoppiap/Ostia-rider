@@ -122,6 +122,7 @@ MonoBehaviour:
   destroyTag:
   - Player
   - Car
+  - Ornamenti
 --- !u!65 &5546659237227996324
 BoxCollider:
   m_ObjectHideFlags: 0

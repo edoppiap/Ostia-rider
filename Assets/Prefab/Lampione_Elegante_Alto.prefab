@@ -134,3 +134,4 @@ MonoBehaviour:
   destroyTag:
   - Player
   - Car
+  - Ornamenti

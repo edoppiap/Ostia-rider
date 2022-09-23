@@ -14,6 +14,7 @@ public class Sgommata : MonoBehaviour
     private SuspensionBikeController bikeController;
     private Vector3 lateralVelocity = Vector3.zero;
     private Rigidbody rb;
+    private AudioSource audioSource;
 
     bool BoolEmittingBasedOnAccelleration()
     {
@@ -31,11 +32,13 @@ public class Sgommata : MonoBehaviour
         {
             trailPrefab.emitting = true;
             smokePrefab.Play();
+            audioSource.mute = false;
         }
         else
         {
             trailPrefab.emitting = false;
             smokePrefab.Stop();
+            audioSource.mute = true;
         }
     }
 
@@ -50,6 +53,7 @@ public class Sgommata : MonoBehaviour
     {
         rb = transform.GetComponent<Rigidbody>();
         bikeController = transform.parent.GetComponent<SuspensionBikeController>();
+        audioSource = transform.GetComponent<AudioSource>();
         trailPrefab.emitting = false;
         smokePrefab.Stop();
     }

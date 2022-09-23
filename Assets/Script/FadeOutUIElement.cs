@@ -27,7 +27,7 @@ public class FadeOutUIElement : MonoBehaviour
             i++;
         }
 
-        alphaZero = new Color(0,0,0,0);
+    alphaZero = new Color(1,1,1,0);
         float time = 0;
         while (childsText[0].faceColor.a > 6f)
         {
@@ -35,7 +35,7 @@ public class FadeOutUIElement : MonoBehaviour
             foreach(TextMeshProUGUI text in childsText)
             {
                 text.faceColor = Color.Lerp(text.faceColor, alphaZero, fadeTime * time);
-
+                text.outlineColor = Color.Lerp(text.outlineColor, new Color(0,0,0,0), fadeTime * time);
             }
             yield return null;
         }

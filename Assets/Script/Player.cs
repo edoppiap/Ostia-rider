@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public string id;
     public int globalMoney;
     public int record;
 }

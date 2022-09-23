@@ -19,6 +19,21 @@ public class SuspensionBikeController : MonoBehaviour
     public Transform backWheelTransform;
     //public Transform rig;
 
+    [Header("Audio part")]
+    public AudioClip starting;
+    public AudioClip idle;
+    public AudioClip accellerating;
+    public AudioClip deaccellerating;
+    public AudioClip topSpeed;
+    [Range(0f,1f)]
+    public float maxVolume=.8f;
+    private AudioSource track01, track02;
+    bool isPlayingTrack01;
+    bool is_accellerating = false;
+    bool is_decellerating = false;
+    bool is_idle = false;
+    bool is_topSpeed = false;
+
     [Header("Parameters")]
     public float accellerationForce = 1500f;
     public float maxSpeed = 50f;
@@ -40,7 +55,8 @@ public class SuspensionBikeController : MonoBehaviour
     private bool isGrounded;
 
     //accelleration parameters
-    private float accelleration;
+    public float accelleration;
+    public float velocity;
     private float lastVelocity = 0;
 
     public float GetCustomHorizontal()
@@ -55,7 +71,7 @@ public class SuspensionBikeController : MonoBehaviour
 
     void CalculateAccelleration()
     {
-        float velocity = Vector3.Dot(bodyRb.transform.forward, bodyRb.velocity);
+        velocity = Vector3.Dot(bodyRb.transform.forward, bodyRb.velocity);
         accelleration = (velocity - lastVelocity) / Time.deltaTime;
         lastVelocity = velocity;
     }
@@ -73,16 +89,53 @@ public class SuspensionBikeController : MonoBehaviour
     public void Accellera()
     {
         customVerticalAxis = 1;
+        if(velocity > -2)
+        {
+            SwapTrack(accellerating);
+        }
+        else
+        {
+            SwapTrack(deaccellerating);
+        }
+        if (isPlayingTrack01)
+            track01.loop = false;
+        else
+            track02.loop = false;
     }
 
     public void Deaccellera()
     {
         customVerticalAxis = 0;
+        if(Mathf.Abs(velocity) > 10)
+        {
+            SwapTrack(deaccellerating);
+            if (isPlayingTrack01)
+                track01.loop = false;
+            else
+                track02.loop = false;
+        }
+        else
+        {
+            SwapTrack(idle);
+
+            if (isPlayingTrack01)
+                track01.loop = true;
+            else
+                track02.loop = true;
+        }
     }
 
     public void Frena()
     {
         customVerticalAxis = -1;
+        if(velocity < -2)
+        {
+            SwapTrack(accellerating);
+        }
+        else
+        {
+            SwapTrack(deaccellerating);
+        }
     }
 
     public void SterzaDx()
@@ -100,10 +153,66 @@ public class SuspensionBikeController : MonoBehaviour
         customHorizontalAxis = 0;
     }
 
+    public void SwapTrack(AudioClip newClip)
+    {
+        StopAllCoroutines();
+        StartCoroutine(FadeTrack(newClip));
+        isPlayingTrack01 = !isPlayingTrack01;
+    }
+
+    private IEnumerator FadeTrack(AudioClip newClip)
+    {
+        float timeToFade = 0.5f;
+        float timeElapsed = 0f;
+        if (isPlayingTrack01)
+        {
+            track02.clip = newClip;
+            track02.Play();
+
+            while(timeElapsed < timeToFade)
+            {
+                track02.volume = Mathf.Lerp(0, maxVolume, timeElapsed / timeToFade);
+                track01.volume = Mathf.Lerp(maxVolume, 0, timeElapsed / timeToFade);
+                timeElapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            track01.Stop();
+        }
+        else
+        {
+            track01.clip = newClip;
+            track01.Play();
+
+            while (timeElapsed < timeToFade)
+            {
+                track01.volume = Mathf.Lerp(0, maxVolume, timeElapsed / timeToFade);
+                track02.volume = Mathf.Lerp(maxVolume, 0, timeElapsed / timeToFade);
+                timeElapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            track02.Stop();
+        }
+
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        track01 = bodyRb.gameObject.AddComponent<AudioSource>();
+        track01.loop = true;
+        track01.clip = idle;
+        track01.volume = maxVolume;
+        track01.spatialBlend = .8f;
+        track01.Play();
+        isPlayingTrack01 = is_idle = true;
+
+
+        track02 = bodyRb.gameObject.AddComponent<AudioSource>();
+        track02.volume = maxVolume;
+        track02.spatialBlend = .8f;
     }
 
     // Update is called once per frame
@@ -115,7 +224,7 @@ public class SuspensionBikeController : MonoBehaviour
         backWheelTransform.position = backWheelRb.transform.position;
         backWheelTransform.rotation = backWheelRb.transform.rotation;
 
-        bodyTransform.position = bodyRb.transform.position + (Vector3.up * - differentUpPosition);
+        bodyTransform.position = bodyRb.transform.position + (Vector3.up * -differentUpPosition);
         bodyTransform.rotation = bodyRb.transform.rotation;
 
         /*rig.position = bodyRb.transform.position + (Vector3.up * -differentRigUpPosition) +
@@ -140,7 +249,37 @@ public class SuspensionBikeController : MonoBehaviour
         //rotateTo = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
 
         //modifica l'attrito in base a se l'RB è a terra
-        //bodyRB.drag = isGrounded ? normalDrag : lowDrag;     
+        //bodyRB.drag = isGrounded ? normalDrag : lowDrag;
+
+        if (isPlayingTrack01)
+        {
+            if (!track01.isPlaying)
+            {
+                if (Mathf.Abs(velocity) < 15)
+                    SwapTrack(idle);
+                else
+                    SwapTrack(topSpeed);
+                if (isPlayingTrack01)
+                    track01.loop = true;
+                else
+                    track02.loop = true;
+            }
+        }
+        else
+        {
+            if (!track02.isPlaying)
+            {
+                if (Mathf.Abs(velocity) < 15)
+                    SwapTrack(idle);
+                else
+                    SwapTrack(topSpeed);
+                if (isPlayingTrack01)
+                    track01.loop = true;
+                else
+                    track02.loop = true;
+            }
+        }
+
 
     }
 
@@ -184,7 +323,6 @@ public class SuspensionBikeController : MonoBehaviour
 
         }
         Stabilizer();
-        CalculateAccelleration();
 
         {
 
@@ -215,6 +353,7 @@ public class SuspensionBikeController : MonoBehaviour
             }*/
 
         }
+        CalculateAccelleration();
 
 
     }
