@@ -146,7 +146,7 @@ public class PlayfabManager : MonoBehaviour
     {
         Player player = gameManager.getPlayer();
         int count = result.Leaderboard.Count;
-        int range = count > 4 ? 4 : count;
+        int range = count > 5 ? 5 : count;
 
         foreach(Transform item in rowsParent)
         {
