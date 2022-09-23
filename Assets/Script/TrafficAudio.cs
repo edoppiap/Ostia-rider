@@ -5,13 +5,12 @@ using UnityEngine;
 public class TrafficAudio : MonoBehaviour
 {
     public AudioClip crashClip, clacsonClip;
-    public string[] destroyTag = { "Player", "Car" };
+    public string[] playTag= { "Player"};
     AudioSource crashSource, clacsonSource;
-    GameObject player;
 
     bool CompareTags(string tag)
     {
-        foreach (string t in destroyTag)
+        foreach (string t in playTag)
         {
             if (t.Equals(tag))
                 return true;
@@ -32,13 +31,11 @@ public class TrafficAudio : MonoBehaviour
         clacsonSource.spatialBlend = 1f;
         clacsonSource.playOnAwake = false;
 
-        player = GameObject.Find("Collider");
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        if(!clacsonSource.isPlaying && (Vector3.Distance(gameObject.transform.position, player.transform.position) < 8))
+        if (clacsonSource!=null && !clacsonSource.isPlaying && CompareTags(other.tag))
         {
             clacsonSource.Play();
         }

@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 3939571369133188836}
   - component: {fileID: 73166850383718721}
   - component: {fileID: 2803217630471937419}
+  - component: {fileID: 6448313283737609689}
+  - component: {fileID: 6361788295040881782}
   m_Layer: 0
   m_Name: Albero1
   m_TagString: Untagged
@@ -81,3 +83,32 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6448313283737609689
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4460810916946771038}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.6953049, y: 0.6783293, z: 3.9780993}
+  m_Center: {x: 0.006198883, y: -0.016092539, z: 1.9890492}
+--- !u!114 &6361788295040881782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4460810916946771038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5af706d675a31634d8aa8c6b762ecd0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clip: {fileID: 8300000, guid: b23ec931a6028814fb818bdca38b7645, type: 3}
+  tags:
+  - Player
+  - Car
