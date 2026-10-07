@@ -17,17 +17,42 @@ public class TrafficCarController : MonoBehaviour
     private Vector3 lastPosition;
     public bool move = true;
 
+    private Rigidbody rb;
+    private RigidbodyConstraints startConstraints;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+        startConstraints = rb.constraints;
+    }
+
+    //sposta l'auto anche nella fisica: con l'interpolazione attiva cambiare solo il transform non basta,
+    //il Rigidbody resterebbe dov'era e riporterebbe l'auto indietro
+    public void Teleport(Vector3 position, Quaternion rotation)
+    {
+        transform.SetPositionAndRotation(position, rotation);
+        rb.position = position;
+        rb.rotation = rotation;
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.constraints = startConstraints;
+        touched = false;
+        lastPosition = position;
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (!collision.transform.CompareTag("Ground") && !collision.transform.CompareTag("Objects"))
         {
+            if (!touched)
+                Debug.Log($"[TrafficDebug] t={Time.time:F2} touched {name}#{gameObject.GetHashCode()} at {transform.position} by {collision.gameObject.name} (tag {collision.gameObject.tag}, layer {LayerMask.LayerToName(collision.gameObject.layer)}) impulse {collision.impulse.magnitude:F0}");
             touched = true;
             GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    //il movimento passa dal Rigidbody: con l'interpolazione attiva le modifiche dirette al transform vengono ignorate
+    void FixedUpdate()
     {
         RaycastHit hitFwd, hitLeft, hitRight;
         bool raycastHitFwd = Physics.Raycast(transform.position + Vector3.up, transform.TransformDirection(Vector3.forward), out hitFwd, 10f, carLayer | playerLayer, QueryTriggerInteraction.Ignore);
@@ -64,10 +89,10 @@ public class TrafficCarController : MonoBehaviour
         bool raycastHit = raycastHitFwd || raycastHitRight;
 
         if (!raycastHit &&
-            transform.position != destination &&
+            rb.position != destination &&
             !touched)
         {
-            Vector3 destinationDirection = destination - transform.position;
+            Vector3 destinationDirection = destination - rb.position;
             destinationDirection.y = 0;
 
             float destinationDistance = destinationDirection.magnitude;
@@ -76,8 +101,9 @@ public class TrafficCarController : MonoBehaviour
             {
                 reachedDestination = false;
                 Quaternion targetRotation = Quaternion.LookRotation(destinationDirection);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-                transform.Translate(Vector3.forward * movementSpeed * Time.deltaTime);
+                Quaternion newRotation = Quaternion.RotateTowards(rb.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+                rb.MoveRotation(newRotation);
+                rb.MovePosition(rb.position + newRotation * Vector3.forward * movementSpeed * Time.deltaTime);
             }
             else
             {
@@ -85,7 +111,7 @@ public class TrafficCarController : MonoBehaviour
             }
 
 
-            velocity = (transform.position - lastPosition) / Time.deltaTime;
+            velocity = (rb.position - lastPosition) / Time.deltaTime;
             velocity.y = 0;
             //var velocityMagnitude = velocity.magnitude;
             velocity = velocity.normalized;
@@ -93,7 +119,7 @@ public class TrafficCarController : MonoBehaviour
             //var rightDotProduct = Vector3.Dot(transform.right, velocity);
             
         }
-        lastPosition = transform.position;
+        lastPosition = rb.position;
     }
 
     public void SetDestination(Vector3 destination)

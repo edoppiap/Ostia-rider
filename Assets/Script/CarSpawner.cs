@@ -7,8 +7,11 @@ public class CarSpawner : MonoBehaviour
     public GameObject autoParent;
     public GameObject[] carPrefab;
     public int carToSpawn;
+    [Tooltip("Ogni quanti secondi si riprova a piazzare le auto disattivate")]
+    public float retryInterval = .5f;
 
     private bool spawned = false;
+    private float retryTimer = 0f;
     private List<GameObject> availableForSpawn = new List<GameObject>();
 
     [HideInInspector]
@@ -17,43 +20,27 @@ public class CarSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         StartCoroutine(Spawn());
     }
 
     IEnumerator Spawn()
     {
-        foreach (Transform t in transform)
-        {
-            availableForSpawn.Add(t.gameObject);
-        }
+        FillAvailableForSpawn();
 
         while (autoParent.transform.childCount < carToSpawn)
         {
-            GameObject obj = Instantiate(carPrefab[UnityEngine.Random.Range(0, carPrefab.Length)]);
-            AssignWaypoint(obj);
-            /*
-            Transform tempWaypointTransform;
-            //Vector2 inCameraPosition;
-            //bool inCameraBool;
-            int temp;
-            do
-            {
-                temp = Random.Range(0, transform.childCount - 1);
-                tempWaypointTransform = transform.GetChild(temp);
-
-                //inCameraPosition = Camera.main.WorldToViewportPoint(tempWaypointTransform.transform.position);
-                //inCameraBool = inCameraPosition.x > 0 && inCameraPosition.x < 1 && inCameraPosition.y > 0 && inCameraPosition.y < 1;
-                //} while (alreadyUsedForSpawn.Contains(temp) && !transform.GetChild(temp).GetComponent<Waypoint>().usableForSpawn);
-            } while (alreadyUsedForSpawn.Contains(temp) && !tempWaypointTransform.GetComponent<Waypoint>().usableForSpawn);
-            alreadyUsedForSpawn.Add(temp);
-
-            obj.GetComponent<WaypointNavigator>().currentWaypoint = tempWaypointTransform.GetComponent<Waypoint>();
-            obj.transform.position = tempWaypointTransform.position + Vector3.up;
-            obj.transform.forward = -tempWaypointTransform.transform.forward; */
-
+            GameObject prefab = carPrefab[Random.Range(0, carPrefab.Length)];
+            Waypoint way = TakeSpawnWaypoint();
+            GameObject obj = way != null
+                ? Instantiate(prefab, way.transform.position, Quaternion.LookRotation(-way.transform.forward), autoParent.transform)
+                : Instantiate(prefab, autoParent.transform);
             obj.GetComponentInChildren<Despawn>().SetCarSpawner(this);
-            obj.transform.SetParent(autoParent.transform);
+            obj.GetComponent<WaypointNavigator>().SetCarSpawner(this);
+
+            if (way != null)
+                PlaceOnWaypoint(obj, way);
+            else
+                DisableCar(obj); //nessun waypoint libero: verrà piazzata più tardi da ReEnable
 
             yield return new WaitForEndOfFrame();
         }
@@ -67,67 +54,70 @@ public class CarSpawner : MonoBehaviour
         {
             obj.SetActive(false);
         }
-            obj.GetComponent<TrafficCarController>().touched = false;
-            disabledCarList.Add(obj);
+        obj.GetComponent<TrafficCarController>().touched = false;
+        disabledCarList.Add(obj);
     }
 
     void ReEnable()
     {
-        foreach (Transform t in transform)
-        {
-            availableForSpawn.Add(t.gameObject);
-        }
+        FillAvailableForSpawn();
         foreach (GameObject obj in disabledCarList.ToArray())
         {
-            AssignWaypoint(obj);
-            obj.SetActive(true);
+            Waypoint way = TakeSpawnWaypoint();
+            if (way == null)
+                break; //riprova al prossimo giro
+
+            obj.SetActive(true); //prima di spostarla, così il Rigidbody esiste già e viene spostato anche lui
+            PlaceOnWaypoint(obj, way);
             disabledCarList.Remove(obj);
         }
         availableForSpawn.Clear();
     }
 
-    void AssignWaypoint(GameObject obj)
+    void FillAvailableForSpawn()
     {
-        Waypoint way = null;
-        int temp;
-        do
+        availableForSpawn.Clear();
+        foreach (Transform t in transform)
         {
-            if (availableForSpawn.Count == 0)
-            {
-                temp = -1;
-                break;
-            }
-            temp = Random.Range(0, availableForSpawn.Count);
-            way = availableForSpawn[temp].GetComponent<Waypoint>();
-
-            //temp = Random.Range(0, transform.childCount - 1);
-            //way = transform.GetChild(temp);
-            if (!way.usableForSpawn || (way.nextWaypoint != null && way.nextWaypoint.deSpawn))
-                availableForSpawn.RemoveAt(temp);
-
-        } while (!way.usableForSpawn || (way.nextWaypoint != null && way.nextWaypoint.deSpawn));
-        
-        if(temp != -1)
-            availableForSpawn.RemoveAt(temp);
-
-        obj.GetComponent<WaypointNavigator>().SetCarSpawner(this);
-        if (way != null)
-        {
-            obj.GetComponent<WaypointNavigator>().currentWaypoint = way;
-            obj.GetComponent<TrafficCarController>().SetDestination(way.GetPosition());
-            obj.transform.position = way.transform.position;
-            obj.transform.forward = -way.transform.forward;
+            availableForSpawn.Add(t.gameObject);
         }
-        else
+    }
+
+    //estrae un waypoint casuale libero (ognuno al massimo una volta per giro), null se non ce ne sono
+    Waypoint TakeSpawnWaypoint()
+    {
+        while (availableForSpawn.Count > 0)
         {
-            obj.GetComponent<WaypointNavigator>().Despawn();
+            int i = Random.Range(0, availableForSpawn.Count);
+            Waypoint way = availableForSpawn[i].GetComponent<Waypoint>();
+            availableForSpawn.RemoveAt(i);
+
+            if (way.usableForSpawn && (way.nextWaypoint == null || !way.nextWaypoint.deSpawn))
+                return way;
         }
+        return null;
+    }
+
+    void PlaceOnWaypoint(GameObject obj, Waypoint way)
+    {
+        obj.GetComponent<WaypointNavigator>().currentWaypoint = way;
+        TrafficCarController controller = obj.GetComponent<TrafficCarController>();
+        controller.Teleport(way.transform.position, Quaternion.LookRotation(-way.transform.forward));
+        controller.SetDestination(way.GetPosition());
+        Debug.Log($"[TrafficDebug] t={Time.time:F2} place {obj.name}#{obj.GetHashCode()} on {way.name} at {way.transform.position}");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (spawned && disabledCarList.Count > 0)
+        if (!spawned || disabledCarList.Count == 0)
+            return;
+
+        retryTimer -= Time.deltaTime;
+        if (retryTimer <= 0f)
+        {
+            retryTimer = retryInterval;
             ReEnable();
+        }
     }
 }
