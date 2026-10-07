@@ -104,7 +104,6 @@ public class CarSpawner : MonoBehaviour
         TrafficCarController controller = obj.GetComponent<TrafficCarController>();
         controller.Teleport(way.transform.position, Quaternion.LookRotation(-way.transform.forward));
         controller.SetDestination(way.GetPosition());
-        Debug.Log($"[TrafficDebug] t={Time.time:F2} place {obj.name}#{obj.GetHashCode()} on {way.name} at {way.transform.position}");
     }
 
     // Update is called once per frame

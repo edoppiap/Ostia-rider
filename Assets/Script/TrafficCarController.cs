@@ -44,8 +44,6 @@ public class TrafficCarController : MonoBehaviour
     {
         if (!collision.transform.CompareTag("Ground") && !collision.transform.CompareTag("Objects"))
         {
-            if (!touched)
-                Debug.Log($"[TrafficDebug] t={Time.time:F2} touched {name}#{gameObject.GetHashCode()} at {transform.position} by {collision.gameObject.name} (tag {collision.gameObject.tag}, layer {LayerMask.LayerToName(collision.gameObject.layer)}) impulse {collision.impulse.magnitude:F0}");
             touched = true;
             GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
         }
