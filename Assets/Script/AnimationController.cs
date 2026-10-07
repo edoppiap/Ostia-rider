@@ -52,7 +52,7 @@ public class AnimationController : MonoBehaviour
         {
             Debug.DrawRay(frontWheelCollider.transform.position, -frontWheelCollider.transform.transform.up * frontWheelCollider.radius, Color.white);
         }
-        float fwrVelocity = frontWheelGrounded ? Vector3.Dot(frontWheelRb.transform.forward, frontWheelRb.velocity) * 100 : 0f;
+        float fwrVelocity = frontWheelGrounded ? Vector3.Dot(frontWheelRb.transform.forward, frontWheelRb.linearVelocity) * 100 : 0f;
 
         //wheels rotation
         backWheelMesh.Rotate(Vector3.right, suspensionBikeController.GetAccellerationForce() * Time.deltaTime);
@@ -84,6 +84,6 @@ public class AnimationController : MonoBehaviour
             bikeAnimator.SetBool("goingLeft", false);
         }
 
-        coperchioAnimator.SetBool("isNotGrounded", backWheelRb.velocity.y < -5);
+        coperchioAnimator.SetBool("isNotGrounded", backWheelRb.linearVelocity.y < -5);
     }
 }

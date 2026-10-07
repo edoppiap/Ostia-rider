@@ -1,19 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Cinemachine;
+
 using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    public PhysicMaterial zeroFrictionMaterial;
+    public PhysicsMaterial zeroFrictionMaterial;
 
     [Header("Cameras")]
-    public CinemachineVirtualCamera mainCamera;
-    public CinemachineVirtualCamera menuCamera;
-    public CinemachineVirtualCamera optionsCamera;
-    public CinemachineVirtualCamera leaderboardCamera;
+    public Unity.Cinemachine.CinemachineVirtualCamera mainCamera;
+    public Unity.Cinemachine.CinemachineVirtualCamera menuCamera;
+    public Unity.Cinemachine.CinemachineVirtualCamera optionsCamera;
+    public Unity.Cinemachine.CinemachineVirtualCamera leaderboardCamera;
 
     [Header("Canvas")]
     public GameObject startCanvas;

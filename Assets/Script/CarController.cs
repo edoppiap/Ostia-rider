@@ -133,7 +133,7 @@ public class CarController : MonoBehaviour
                 Vector3 ltForce = Vector3.zero;
                 //sphereRB.AddForce(sphereRB.transform.forward * moveInput * customVerticalAxis); //muove la macchina
 
-                Vector3 lateralVelocity = Vector3.Dot(sphereRB.transform.right, sphereRB.velocity) * sphereRB.transform.right;
+                Vector3 lateralVelocity = Vector3.Dot(sphereRB.transform.right, sphereRB.linearVelocity) * sphereRB.transform.right;
                 //float lateralAccelleration = lateralVelocity.magnitude;
                 if (lateralVelocity.magnitude > 0)
                 {
@@ -147,7 +147,7 @@ public class CarController : MonoBehaviour
             //else
             //sphereRB.AddForce(transform.up * -50f); //aggiunge la gravità
 
-            sphereRB.velocity = Vector3.ClampMagnitude(sphereRB.velocity, maxSpeed);
+            sphereRB.linearVelocity = Vector3.ClampMagnitude(sphereRB.linearVelocity, maxSpeed);
 
 
             //colliderTransform.MoveRotation(transform.rotation);
@@ -162,8 +162,8 @@ public class CarController : MonoBehaviour
 
     public bool isAccellerating()
     {
-        float accelleration = (sphereRB.velocity.z - lastVelocity) / Time.fixedDeltaTime;
-        lastVelocity = sphereRB.velocity.z;
+        float accelleration = (sphereRB.linearVelocity.z - lastVelocity) / Time.fixedDeltaTime;
+        lastVelocity = sphereRB.linearVelocity.z;
         float acc = Mathf.Abs(Mathf.Round(accelleration));
 
 

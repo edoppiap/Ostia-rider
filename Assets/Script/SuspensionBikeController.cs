@@ -71,7 +71,7 @@ public class SuspensionBikeController : MonoBehaviour
 
     void CalculateAccelleration()
     {
-        velocity = Vector3.Dot(bodyRb.transform.forward, bodyRb.velocity);
+        velocity = Vector3.Dot(bodyRb.transform.forward, bodyRb.linearVelocity);
         accelleration = (velocity - lastVelocity) / Time.deltaTime;
         lastVelocity = velocity;
     }
@@ -248,7 +248,7 @@ public class SuspensionBikeController : MonoBehaviour
         //rotate the car parallel to the ground
         //rotateTo = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
 
-        //modifica l'attrito in base a se l'RB è a terra
+        //modifica l'attrito in base a se l'RB ï¿½ a terra
         //bodyRB.drag = isGrounded ? normalDrag : lowDrag;
 
         if (isPlayingTrack01)
@@ -312,9 +312,9 @@ public class SuspensionBikeController : MonoBehaviour
 
             bodyRb.AddTorque(torque);
 
-            bodyRb.velocity = Vector3.ClampMagnitude(bodyRb.velocity, maxSpeed);
+            bodyRb.linearVelocity = Vector3.ClampMagnitude(bodyRb.linearVelocity, maxSpeed);
 
-            lateralVelocity = Vector3.Dot(bodyRb.transform.right, bodyRb.velocity) * bodyRb.transform.right;
+            lateralVelocity = Vector3.Dot(bodyRb.transform.right, bodyRb.linearVelocity) * bodyRb.transform.right;
 
             if (lateralVelocity.magnitude > 0)
             {

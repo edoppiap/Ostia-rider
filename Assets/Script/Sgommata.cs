@@ -18,7 +18,7 @@ public class Sgommata : MonoBehaviour
 
     bool BoolEmittingBasedOnAccelleration()
     {
-        float velocity = Vector3.Dot(rb.velocity, rb.transform.forward);
+        float velocity = Vector3.Dot(rb.linearVelocity, rb.transform.forward);
         return isBack &&
             Mathf.Abs(bikeController.GetAccelleration()) > emittionAccelleration &&
             velocity >= 0 &&
@@ -61,6 +61,6 @@ public class Sgommata : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        lateralVelocity = Vector3.Dot(rb.transform.right, rb.velocity) * rb.transform.right;
+        lateralVelocity = Vector3.Dot(rb.transform.right, rb.linearVelocity) * rb.transform.right;
     }
 }
