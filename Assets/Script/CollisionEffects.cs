@@ -12,7 +12,8 @@ public class CollisionEffects : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(!collision.gameObject.CompareTag(ignoreTag.ToString()))
+        //i contatti possono essere stati ignorati (es. dal filtro del burattino di SphereBikeController)
+        if(collision.contactCount > 0 && !collision.gameObject.CompareTag(ignoreTag.ToString()))
             Instantiate(hitEffectPrefab, collision.GetContact(0).point, Quaternion.identity);
     }
 }

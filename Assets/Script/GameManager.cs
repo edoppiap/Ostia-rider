@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
     private float deliveryTime;
     private int localMoney = 0;
     private PlayfabManager playfabManager;
-    private SuspensionBikeController controller;
+    private IBikeControls controller;
 
     public float GetTimeRemaining()
     {
@@ -491,7 +491,7 @@ public class GameManager : MonoBehaviour
     {
         GameObject motorino = GameObject.Find("Motorino");
         player = motorino.GetComponent<Player>();
-        controller = motorino.GetComponent<SuspensionBikeController>();
+        controller = BikeControls.FindActive(motorino);
         playfabManager = GetComponent<PlayfabManager>();
 
         LoadPlayer();

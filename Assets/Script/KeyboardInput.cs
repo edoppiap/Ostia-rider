@@ -6,7 +6,7 @@ public class KeyboardInput : MonoBehaviour
 {
 #if UNITY_EDITOR || UNITY_STANDALONE
     private GameManager gameManager;
-    private SuspensionBikeController controller;
+    private IBikeControls controller;
     private PlayfabManager playfabManager;
     private int lastVertical = 0;
     private int lastHorizontal = 0;
@@ -14,7 +14,7 @@ public class KeyboardInput : MonoBehaviour
     void Start()
     {
         gameManager = FindFirstObjectByType<GameManager>();
-        controller = FindFirstObjectByType<SuspensionBikeController>();
+        controller = BikeControls.FindActive(GameObject.Find("Motorino"));
         playfabManager = gameManager.GetComponent<PlayfabManager>();
     }
 
